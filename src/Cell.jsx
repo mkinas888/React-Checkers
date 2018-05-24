@@ -3,6 +3,7 @@ import './Cell.css';
 
 class Cell extends Component {
 
+    // get button id so as to know which one was clicked
     handleOnClick = (e) => {
         this.props.activatePiece(e.target.value);
     }
