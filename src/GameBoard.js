@@ -8,7 +8,7 @@ class GameBoard extends Component {
     super(props);
     this.state = {
       board: data,
-      activePlayer: 'red',
+      activePlayer: 'b',
     };
   }
 
@@ -54,8 +54,10 @@ class GameBoard extends Component {
     var id2 = value % 10 - 1;
     var tmpObject = [...this.state.board]
     tmpObject.map(row => row.map(cell => cell.active = false));
-    tmpObject[id1][id2].active = true;
-    this.setState({board: tmpObject});
+    if(tmpObject[id1][id2].player === this.state.activePlayer){
+      tmpObject[id1][id2].active = true;
+      this.setState({board: tmpObject});
+    }
   }
 
   
