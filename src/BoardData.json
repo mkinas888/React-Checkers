@@ -1,0 +1,402 @@
+[
+    [
+        {
+            "id": 11,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 12,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 13,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 14,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 15,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 16,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 17,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 18,
+            "color": "white",
+            "player": "none",
+            "active": false
+        }
+    ],
+    [
+        {
+            "id": 21,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 22,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 23,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 24,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 25,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 26,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 27,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 28,
+            "color": "black",
+            "player": "b",
+            "active": false
+        }
+    ],
+    [
+        {
+            "id": 31,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 32,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 33,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 34,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 35,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 36,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 37,
+            "color": "black",
+            "player": "b",
+            "active": false
+        },
+        {
+            "id": 38,
+            "color": "white",
+            "player": "none",
+            "active": false
+        }
+    ],
+    [
+        {
+            "id": 41,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 42,
+            "color": "black",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 43,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 44,
+            "color": "black",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 45,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 46,
+            "color": "black",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 47,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 48,
+            "color": "black",
+            "player": "none",
+            "active": false
+        }
+    ],
+    [
+        {
+            "id": 51,
+            "color": "black",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 52,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 53,
+            "color": "black",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 54,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 55,
+            "color": "black",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 56,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 57,
+            "color": "black",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 58,
+            "color": "white",
+            "player": "none",
+            "active": false
+        }
+    ],
+    [
+        {
+            "id": 61,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 62,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 63,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 64,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 65,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 66,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 67,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 68,
+            "color": "black",
+            "player": "r",
+            "active": false
+        }
+    ],
+    [
+        {
+            "id": 71,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 72,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 73,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 74,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 75,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 76,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 77,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 78,
+            "color": "white",
+            "player": "none",
+            "active": false
+        }
+    ],
+    [
+        {
+            "id": 81,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 82,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 83,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 84,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 85,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 86,
+            "color": "black",
+            "player": "r",
+            "active": false
+        },
+        {
+            "id": 87,
+            "color": "white",
+            "player": "none",
+            "active": false
+        },
+        {
+            "id": 88,
+            "color": "black",
+            "player": "r",
+            "active": false
+        }
+    ]
+]

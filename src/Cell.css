@@ -1,4 +1,4 @@
-.cell-black, .cell-white {
+.cell-black-false, .cell-black-true, .cell-white-false, .cell-white-true {
   height: 4em;
   width: 4em;
   margin: 2px;
@@ -7,13 +7,24 @@
   justify-content: center;
   align-items: center; }
 
-.cell-black {
+.cell-black-false {
   border: 1px solid #ddd;
   background-color: #ddd; }
 
-.cell-white {
+.cell-white-false {
   border: 1px solid #ddd;
   background-color: #fcfdff; }
+
+.cell-black-true {
+  border: 1px solid #1d5ac4;
+  background-color: #1d5ac4; }
+
+.cell-white-true {
+  border: 1px solid #1d5ac4;
+  background-color: #1d5ac4; }
+
+button {
+  cursor: pointer; }
 
 .gamePiece-black, .gamePiece-red {
   height: 80%;
