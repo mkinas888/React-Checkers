@@ -1,0 +1,39 @@
+.cell-black , .cell-white {
+    height: 4em;
+    width: 4em;
+    margin: 2px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell-black {
+    border: 1px solid #ddd;
+    background-color: #ddd;
+}
+
+.cell-white {
+    border: 1px solid #ddd;
+    background-color: #fcfdff;
+}
+
+.gamePiece-black, .gamePiece-red {
+    height: 80%;
+    width: 80%;
+    margin: auto;
+    border: transparent;
+    border-radius: 50%;
+}
+
+.gamePiece-black {
+    background-color: #4c4e51;
+}
+
+.gamePiece-red {
+    background-color: #d61515;
+}
+
+.gamePiece-none {
+    display: none;
+}

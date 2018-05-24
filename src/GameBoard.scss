@@ -1,0 +1,16 @@
+.GameBoard-container {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+.GameBoard {
+    width: 45%;
+    height: 100%;
+    margin: 2% 25%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background-color: transparent;
+    flex-wrap: wrap;
+}
