@@ -9,6 +9,8 @@ class GameBoard extends Component {
     this.state = {
       board: data,
       activePlayer: 'r',
+      previousPiecePosition: [],
+      possibleMovesIds: [] 
     };
   }
 
@@ -50,69 +52,123 @@ class GameBoard extends Component {
     );
   } 
 
+  setPossibleMoves = (id1, id2, player, board) => {
+    var a = [];
+    this.setState({possibleMovesIds: a});
+    this.setState({previousPiecePosition: a});
+    // remove active state from previously activated 
+    board.map(row => row.map(cell => cell.active = false));
+    if(board[id1][id2].player !== 'none'){
+      if(player === 'r') {
+        if(board[id1][id2].player === 'r') {
+          board[id1][id2].active = true;
+          this.setState(prevState => ({
+            previousPiecePosition: [...prevState.previousPiecePosition, id1, id2]
+          })); 
+        }
+        if(id1 > 0){
+          if(id2 > 0 && id2 < 7){
+            if(board[id1-1][id2-1].player === 'none') {
+              board[id1-1][id2-1].active = true;
+              this.setState(prevState => ({
+                possibleMovesIds: [...prevState.possibleMovesIds, id1-1, id2-1]
+              }));
+            } 
+            if (board[id1-1][id2+1].player === 'none') {
+              board[id1-1][id2+1].active = true;
+              this.setState(prevState => ({
+                possibleMovesIds: [...prevState.possibleMovesIds, id1-1, id2+1]
+              }));
+            }
+          }
+          if(id2 === 0) {
+            if (board[id1-1][id2+1].player === 'none') {
+              board[id1-1][id2+1].active = true;
+              this.setState(prevState => ({
+                possibleMovesIds: [...prevState.possibleMovesIds, id1-1, id2+1]
+              }));
+            }
+          }
+          if(id2 === 7) {
+            if(board[id1-1][id2-1].player === 'none') {
+              board[id1-1][id2-1].active = true;
+              this.setState(prevState => ({
+                possibleMovesIds: [...prevState.possibleMovesIds, id1-1, id2-1]
+              }));
+            }
+          }
+        }
+      } else if(player === 'b') {
+        if(board[id1][id2].player === 'b') {
+          board[id1][id2].active = true;
+          this.setState(prevState => ({
+            previousPiecePosition: [...prevState.previousPiecePosition, id1, id2]
+          })); 
+        }
+        if(id1 < 7){
+          if(id2 > 0 && id2 < 7){
+            if(board[id1+1][id2-1].player === 'none') {
+              board[id1+1][id2-1].active = true;
+              this.setState(prevState => ({
+                possibleMovesIds: [...prevState.possibleMovesIds, id1+1, id2-1]
+              }));
+            } 
+            if (board[id1+1][id2+1].player === 'none') {
+              board[id1+1][id2+1].active = true;
+              this.setState(prevState => ({
+                possibleMovesIds: [...prevState.possibleMovesIds, id1+1, id2+1]
+              }));
+            }
+          }
+          if(id2 === 0) {
+            if (board[id1+1][id2+1].player === 'none') {
+              board[id1+1][id2+1].active = true;
+              this.setState(prevState => ({
+                possibleMovesIds: [...prevState.possibleMovesIds, id1+1, id2+1]
+              }));
+            }
+          }
+          if(id2 === 7) {
+            if(board[id1+1][id2-1].player === 'none') {
+              board[id1+1][id2-1].active = true;
+              this.setState(prevState => ({
+                possibleMovesIds: [...prevState.possibleMovesIds, id1+1, id2-1]
+              }));
+            }
+          }
+        }
+      }
+    }
+    return board;
+  }
+
   activatePiece = (value) => {
     //get id of first and second table from clicked button's id
     var id1 = Math.floor(value/10) - 1;
     var id2 = value % 10 - 1;
-    var tmpObject = [...this.state.board]
-    // remove active state from previously activated cells
-    tmpObject.map(row => row.map(cell => cell.active = false));
-    // activate only current player's pieces
-    if(tmpObject[id1][id2].player === this.state.activePlayer) {
-      tmpObject[id1][id2].active = true;
-      if(tmpObject[id1][id2].player === 'b') {
-        if(id1 < 7){
-          if(id2 > 0 && id2 < 7){
-            if(tmpObject[id1+1][id2-1].player === 'none') {
-              tmpObject[id1+1][id2-1].active = true;
-            } 
-            if (tmpObject[id1+1][id2+1].player === 'none') {
-              tmpObject[id1+1][id2+1].active = true;
-            }
-          }
-          if(id2 === 0) {
-            if (tmpObject[id1+1][id2+1].player === 'none') {
-              tmpObject[id1+1][id2+1].active = true;
-            }
-          }
-          if(id2 === 7) {
-            if(tmpObject[id1+1][id2-1].player === 'none') {
-              tmpObject[id1+1][id2-1].active = true;
-            }
-          }
-        }
-      }
-      if(tmpObject[id1][id2].player === 'r') {
-        if(id1 > 0){
-          if(id2 > 0 && id2 < 7){
-            if(tmpObject[id1-1][id2-1].player === 'none') {
-              tmpObject[id1-1][id2-1].active = true;
-            } 
-            if (tmpObject[id1-1][id2+1].player === 'none') {
-              tmpObject[id1-1][id2+1].active = true;
-            }
-          }
-          if(id2 === 0) {
-            if (tmpObject[id1-1][id2+1].player === 'none') {
-              tmpObject[id1-1][id2+1].active = true;
-            }
-          }
-          if(id2 === 7) {
-            if(tmpObject[id1-1][id2-1].player === 'none') {
-              tmpObject[id1-1][id2-1].active = true;
-            }
-          }
-        }
-      }
-
-      this.setState({board: tmpObject});
+    this.setPossibleMoves(id1, id2, this.state.activePlayer, this.state.board);
+    if( this.state.board[id1][id2].player === 'none' && this.state.possibleMovesIds.length !== 0){
+      this.performMove(id1, id2);
+      return;
     }
+  }
+
+  performMove = (id1, id2) => {
+    var a = [];
+    var tmpBoard = [...this.state.board];
+    tmpBoard[id1][id2].player = this.state.activePlayer;
+    tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].player = 'none';
+    this.setState({
+      board: tmpBoard,
+      activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r',
+      previousPiecePosition: a
+    });
+    this.renderCells;
   }
 
   
 
   render() {
-    console.log(this.state.board[1][2]);
     return (
       <div className="GameBoard-container">
         {this.renderCells()}

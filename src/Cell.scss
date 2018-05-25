@@ -34,9 +34,10 @@ button {
     text-decoration: none;
     cursor: pointer;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    outline: none;
 }
 
-.gamePiece-black, .gamePiece-red {
+.gamePiece-black, .gamePiece-red, .gamePiece-none {
     height: 80%;
     width: 80%;
     margin: auto;
@@ -53,5 +54,12 @@ button {
 }
 
 .gamePiece-none {
-    display: none;
+    background-color: transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    box-shadow: none;
+    -webkit-box-shadow: none; 
+    -moz-box-shadow: none;
 }
