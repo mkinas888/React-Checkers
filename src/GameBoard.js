@@ -691,10 +691,34 @@ class GameBoard extends Component {
     this.setState({availableBeatingsDown: beatingsDown});
   }
 
+  didRedWon = () => {
+    var redWin = true;
+    this.state.board.map(row => row.map(cell => {if(cell.player === 'b'){redWin = false}}));
+    return redWin;
+  }
+
+  didBlackWon = () => {
+    var blackWin = true;
+    this.state.board.map(row => row.map(cell => {if(cell.player === 'r'){blackWin = false;}}));
+    return blackWin;
+  }
+
+  shouldGameEnd = () => {
+    var blackWin = this.didBlackWon();
+    var redWin = this.didRedWon();
+    if(redWin) {
+      alert("Congratulations Red Won");
+    }
+    if(blackWin) {
+      alert("Congratulations Black Won");
+    }
+  }
+
   activatePiece = (value) => {
     //get id of first and second table from clicked button's id
     var id1 = Math.floor(value/10) - 1;
     var id2 = value % 10 - 1;
+    this.shouldGameEnd();
     if(this.state.isActivePieceKing) {
       this.setPossibleKingMoves(id1, id2, this.state.activePlayer);
       this.checkIfKingsBeatingAvailable(id1, id2, this.state.activePlayer);
