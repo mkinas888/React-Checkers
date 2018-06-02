@@ -11,8 +11,10 @@ class Cell extends Component {
     render () {
         return (
             <div className={`cell-${this.props.cellColor}-${this.props.isActive}`}>
-                <button className={`gamePiece-${this.props.belongsTo}`} 
-                        onClick={this.handleOnClick} value={this.props.cellId}/>
+                <button className={`gamePiece-${this.props.belongsTo}-${this.props.isKing}`} 
+                        onClick={this.handleOnClick} value={this.props.cellId}>
+                        K
+                </button>
             </div>
         );
     }

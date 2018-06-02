@@ -37,25 +37,40 @@ button {
     outline: none;
 }
 
-.gamePiece-black, .gamePiece-red, .gamePiece-none {
+.gamePiece-black-pon, .gamePiece-red-pon, .gamePiece-none, .gamePiece-black-king, 
+.gamePiece-red-king, .gamePiece-none-pon {
     height: 80%;
     width: 80%;
     margin: auto;
+    font-size: 25px;
     border: transparent;
     border-radius: 50%;
 }
 
-.gamePiece-black {
+.gamePiece-black-pon {
     background-color: #4c4e51;
+    color: transparent;
 }
 
-.gamePiece-red {
+.gamePiece-red-pon {
     background-color: #d61515;
+    color: transparent;
 }
 
-.gamePiece-none {
+.gamePiece-black-king {
+    background-color: #4c4e51;
+    color:wheat;
+}
+
+.gamePiece-red-king {
+    background-color: #d61515;
+    color: black;
+}
+
+.gamePiece-none-pon {
     background-color: transparent;
     background-repeat:no-repeat;
+    color: transparent;
     border: none;
     cursor:pointer;
     overflow: hidden;
