@@ -8,7 +8,7 @@ class GameBoard extends Component {
     super(props);
     this.state = {
       board: data,
-      activePlayer: 'r',
+      activePlayer: 'b',
       isActivePieceKing: false,
       idsToBeat: [],
       previousPiecePosition: [],
@@ -56,100 +56,87 @@ class GameBoard extends Component {
     );
   } 
 
-  setPossibleMoves = (id1, id2, player) => {
+  setPossibleMoves = (board,id1, id2, player) => {
     var empty = [];
+    var moves = [];
+    var prevPos = [];
     this.setState({possibleMovesIds: empty});
     this.setState({previousPiecePosition: empty});
     this.setState({isActivePieceKing: false});
     // remove active state from previously activated 
-    this.state.board.map(row => row.map(cell => cell.active = false));
-    if(this.state.activePlayer !== this.state.board[id1][id2].player){
+    board.map(row => row.map(cell => cell.active = false));
+    if(player !== board[id1][id2].player){
       return;
     }
-    if(this.state.board[id1][id2].player !== 'none'){
+    if(board[id1][id2].player !== 'none'){
       if(player === 'r') {
-        if(this.state.board[id1][id2].player === 'r') {
-          this.state.board[id1][id2].active = true;
-          this.setState(prevState => ({
-            previousPiecePosition: [...prevState.previousPiecePosition, id1, id2],
-          })); 
+        if(board[id1][id2].player === 'r') {
+          board[id1][id2].active = true;
+          prevPos = [...prevPos,id1,id2];
         }
         if(id1 > 0){
           if(id2 > 0 && id2 < 7){
-            if(this.state.board[id1-1][id2-1].player === 'none') {
-              this.state.board[id1-1][id2-1].active = true;
-              this.setState(prevState => ({
-                possibleMovesIds: [...prevState.possibleMovesIds, id1-1, id2-1]
-              }));
+            if(board[id1-1][id2-1].player === 'none') {
+              board[id1-1][id2-1].active = true;
+              moves = [...moves, id1-1, id2-1];
             } 
-            if (this.state.board[id1-1][id2+1].player === 'none') {
-              this.state.board[id1-1][id2+1].active = true;
-              this.setState(prevState => ({
-                possibleMovesIds: [...prevState.possibleMovesIds, id1-1, id2+1]
-              }));
+            if (board[id1-1][id2+1].player === 'none') {
+              board[id1-1][id2+1].active = true;
+              moves = [...moves, id1-1, id2+1];
             }
           }
           if(id2 === 0) {
-            if (this.state.board[id1-1][id2+1].player === 'none') {
-              this.state.board[id1-1][id2+1].active = true;
-              this.setState(prevState => ({
-                possibleMovesIds: [...prevState.possibleMovesIds, id1-1, id2+1]
-              }));
+            if (board[id1-1][id2+1].player === 'none') {
+              board[id1-1][id2+1].active = true;
+              moves = [...moves, id1-1, id2+1];
             }
           }
           if(id2 === 7) {
-            if(this.state.board[id1-1][id2-1].player === 'none') {
-              this.state.board[id1-1][id2-1].active = true;
-              this.setState(prevState => ({
-                possibleMovesIds: [...prevState.possibleMovesIds, id1-1, id2-1]
-              }));
+            if(board[id1-1][id2-1].player === 'none') {
+              board[id1-1][id2-1].active = true;
+              moves = [...moves, id1-1, id2-1];
             }
           }
         }
       } else if(player === 'b') {
-        if(this.state.board[id1][id2].player === 'b') {
-          this.state.board[id1][id2].active = true;
-          this.setState(prevState => ({
-            previousPiecePosition: [...prevState.previousPiecePosition, id1, id2]
-          })); 
+        if(board[id1][id2].player === 'b') {
+          board[id1][id2].active = true;
+          prevPos = [...prevPos,id1,id2];
         }
         if(id1 < 7){
           if(id2 > 0 && id2 < 7){
-            if(this.state.board[id1+1][id2-1].player === 'none') {
-              this.state.board[id1+1][id2-1].active = true;
-              this.setState(prevState => ({
-                possibleMovesIds: [...prevState.possibleMovesIds, id1+1, id2-1]
-              }));
+            if(board[id1+1][id2-1].player === 'none') {
+              board[id1+1][id2-1].active = true;
+              moves = [...moves, id1+1, id2-1];
             } 
-            if (this.state.board[id1+1][id2+1].player === 'none') {
-              this.state.board[id1+1][id2+1].active = true;
-              this.setState(prevState => ({
-                possibleMovesIds: [...prevState.possibleMovesIds, id1+1, id2+1]
-              }));
+            if (board[id1+1][id2+1].player === 'none') {
+              board[id1+1][id2+1].active = true;
+              moves = [...moves, id1+1, id2+1];
             }
           }
           if(id2 === 0) {
-            if (this.state.board[id1+1][id2+1].player === 'none') {
-              this.state.board[id1+1][id2+1].active = true;
-              this.setState(prevState => ({
-                possibleMovesIds: [...prevState.possibleMovesIds, id1+1, id2+1]
-              }));
+            if (board[id1+1][id2+1].player === 'none') {
+              board[id1+1][id2+1].active = true;
+              moves = [...moves, id1+1, id2+1];
             }
           }
           if(id2 === 7) {
-            if(this.state.board[id1+1][id2-1].player === 'none') {
-              this.state.board[id1+1][id2-1].active = true;
-              this.setState(prevState => ({
-                possibleMovesIds: [...prevState.possibleMovesIds, id1+1, id2-1]
-              }));
+            if(board[id1+1][id2-1].player === 'none') {
+              board[id1+1][id2-1].active = true;
+              moves = [...moves, id1+1, id2-1];
             }
           }
         }
       }
     }
+    this.setState({
+      possibleMovesIds: moves,
+      previousPiecePosition: prevPos
+    })
+    return moves;
   }
 
-  setPossibleKingMoves = (id1, id2, player) => {
+  setPossibleKingMoves = (board, id1, id2, player) => {
     var empty = [];
     var moves = [];
     var i=0,j=0,k=0;
@@ -157,14 +144,14 @@ class GameBoard extends Component {
     this.setState({previousPiecePosition: empty});
     this.setState({isActivePieceKing: true});
     // remove active state from previously activated 
-    this.state.board.map(row => row.map(cell => cell.active = false));
-    if(this.state.activePlayer !== this.state.board[id1][id2].player){
+    board.map(row => row.map(cell => cell.active = false));
+    if(player !== board[id1][id2].player){
       return;
     }
-    if(this.state.board[id1][id2].player !== 'none'){
+    if(board[id1][id2].player !== 'none'){
       if(player === 'r') {
-        if(this.state.board[id1][id2].player === 'r') {
-          this.state.board[id1][id2].active = true;
+        if(board[id1][id2].player === 'r') {
+          board[id1][id2].active = true;
           this.setState(prevState => ({
             previousPiecePosition: [...prevState.previousPiecePosition, id1, id2],
           })); 
@@ -173,16 +160,16 @@ class GameBoard extends Component {
         k = id2 - 1;
         for(i = id1 - 1; i >= 0; i--) {
           if(j <= 7) {
-            if(this.state.board[i][j].player === 'none') {
-              this.state.board[i][j].active = true;
+            if(board[i][j].player === 'none') {
+              board[i][j].active = true;
               moves = [...moves, i, j];
             } else {
               j = 8;
             }
           }
           if(k >= 0) {
-            if(this.state.board[i][k].player === 'none') {
-              this.state.board[i][k].active = true;
+            if(board[i][k].player === 'none') {
+              board[i][k].active = true;
               moves = [...moves, i, k];
             } else {
               k = -1;
@@ -195,16 +182,16 @@ class GameBoard extends Component {
         k = id2 - 1;
         for(i = id1 + 1; i <=7; i++) {
           if(j <= 7) {
-            if(this.state.board[i][j].player === 'none') {
-              this.state.board[i][j].active = true;
+            if(board[i][j].player === 'none') {
+              board[i][j].active = true;
               moves = [...moves, i, j];
             } else {
               j = 8;
             }
           }
           if(k >= 0) {
-            if(this.state.board[i][k].player === 'none') {
-              this.state.board[i][k].active = true;
+            if(board[i][k].player === 'none') {
+              board[i][k].active = true;
               moves = [...moves, i, k];
             } else {
               k = -1;
@@ -214,7 +201,7 @@ class GameBoard extends Component {
           k--;
         }
       } else if (player === 'b') {
-        this.state.board[id1][id2].active = true;
+        board[id1][id2].active = true;
         this.setState(prevState => ({
           previousPiecePosition: [...prevState.previousPiecePosition, id1, id2],
         }));
@@ -222,16 +209,16 @@ class GameBoard extends Component {
         k = id2 - 1;
         for(i = id1 + 1; i <=7; i++) {
           if(j <= 7) {
-            if(this.state.board[i][j].player === 'none') {
-              this.state.board[i][j].active = true;
+            if(board[i][j].player === 'none') {
+              board[i][j].active = true;
               moves = [...moves, i, j];
             } else {
               j = 8;
             }
           }
           if(k >= 0) {
-            if(this.state.board[i][k].player === 'none') {
-              this.state.board[i][k].active = true;
+            if(board[i][k].player === 'none') {
+              board[i][k].active = true;
               moves = [...moves, i, k];
             } else {
               k = -1;
@@ -244,16 +231,16 @@ class GameBoard extends Component {
         k = id2 - 1;
         for(i = id1 - 1; i >= 0; i--) {
           if(j <= 7) {
-            if(this.state.board[i][j].player === 'none') {
-              this.state.board[i][j].active = true;
+            if(board[i][j].player === 'none') {
+              board[i][j].active = true;
               moves = [...moves, i, j];
             } else {
               j = 8;
             }
           }
           if(k >= 0) {
-            if(this.state.board[i][k].player === 'none') {
-              this.state.board[i][k].active = true;
+            if(board[i][k].player === 'none') {
+              board[i][k].active = true;
               moves = [...moves, i, k];
             } else {
               k = -1;
@@ -265,52 +252,46 @@ class GameBoard extends Component {
       }
     }
     this.setState({possibleMovesIds: moves});
+    return moves;
   }
 
-  checkIfBeatingUpAvailable = (id1, id2, player) => {
+  checkIfBeatingUpAvailable = (board,id1, id2, player) => {
     var empty = [];
+    var beatings = [];
     this.setState({isActivePieceKing: false});
     this.setState({availableBeatingsUp: empty});
-    if(this.state.activePlayer !== this.state.board[id1][id2].player){
+    if(player !== board[id1][id2].player){
       return;
     }
-    if(this.state.activePlayer === 'r'){
+    if(player === 'r'){
       if(id1 < 6) {
         if(id2 < 2) {
-          if(this.state.board[id1+1][id2+1].player === 'b') {
-            if(this.state.board[id1+2][id2+2].player === 'none') {
-              this.state.board[id1+2][id2+2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsUp: [...prevState.availableBeatingsUp, id1+2, id2+2]
-              }));
+          if(board[id1+1][id2+1].player === 'b') {
+            if(board[id1+2][id2+2].player === 'none') {
+              board[id1+2][id2+2].active = true;
+              beatings = [...beatings,id1+2,id2+2];
             }
           }
         }
         if(id2 > 5){
-          if(this.state.board[id1+1][id2-1].player === 'b') {
-            if(this.state.board[id1+2][id2-2].player === 'none') {
-              this.state.board[id1+2][id2-2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsUp: [...prevState.availableBeatingsUp, id1+2, id2-2]
-              }));
+          if(board[id1+1][id2-1].player === 'b') {
+            if(board[id1+2][id2-2].player === 'none') {
+              board[id1+2][id2-2].active = true;
+              beatings = [...beatings,id1+2,id2-2];
             }
           }
         }
         if(id2 >= 2 && id2 <= 5) {
-          if(this.state.board[id1+1][id2+1].player === 'b') {
-            if(this.state.board[id1+2][id2+2].player === 'none') {
-              this.state.board[id1+2][id2+2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsUp: [...prevState.availableBeatingsUp, id1+2, id2+2]
-              }));
+          if(board[id1+1][id2+1].player === 'b') {
+            if(board[id1+2][id2+2].player === 'none') {
+              board[id1+2][id2+2].active = true;
+              beatings = [...beatings,id1+2,id2+2];
             }
           }
-          if(this.state.board[id1+1][id2-1].player === 'b') {
-            if(this.state.board[id1+2][id2-2].player === 'none') {
-              this.state.board[id1+2][id2-2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsUp: [...prevState.availableBeatingsUp, id1+2, id2-2]
-              }));
+          if(board[id1+1][id2-1].player === 'b') {
+            if(board[id1+2][id2-2].player === 'none') {
+              board[id1+2][id2-2].active = true;
+              beatings = [...beatings,id1+2,id2-2];
             }
           }
         }
@@ -319,91 +300,78 @@ class GameBoard extends Component {
     else {
       if(id1 > 1) {
         if(id2 < 2) {
-          if(this.state.board[id1-1][id2+1].player === 'r') {
-            if(this.state.board[id1-2][id2+2].player === 'none') {
-              this.state.board[id1-2][id2+2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsUp: [...prevState.availableBeatingsUp, id1-2, id2+2]
-              }));
+          if(board[id1-1][id2+1].player === 'r') {
+            if(board[id1-2][id2+2].player === 'none') {
+              board[id1-2][id2+2].active = true;
+              beatings = [...beatings,id1-2,id2+2];
             }
           }
         }
         if(id2 > 5){
-          if(this.state.board[id1-1][id2-1].player === 'r') {
-            if(this.state.board[id1-2][id2-2].player === 'none') {
-              this.state.board[id1-2][id2-2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsUp: [...prevState.availableBeatingsUp, id1-2, id2-2]
-              }));
+          if(board[id1-1][id2-1].player === 'r') {
+            if(board[id1-2][id2-2].player === 'none') {
+              board[id1-2][id2-2].active = true;
+              beatings = [...beatings,id1-2,id2-2];
             }
           }
         }
         if (id2 >= 2 && id2 <= 5) {
-          if(this.state.board[id1-1][id2+1].player === 'r') {
-            if(this.state.board[id1-2][id2+2].player === 'none') {
-              this.state.board[id1-2][id2+2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsUp: [...prevState.availableBeatingsUp, id1-2, id2+2]
-              }));
+          if(board[id1-1][id2+1].player === 'r') {
+            if(board[id1-2][id2+2].player === 'none') {
+              board[id1-2][id2+2].active = true;
+              beatings = [...beatings,id1-2,id2+2];
             }
           }
-          if(this.state.board[id1-1][id2-1].player === 'r') {
-            if(this.state.board[id1-2][id2-2].player === 'none') {
-              this.state.board[id1-2][id2-2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsUp: [...prevState.availableBeatingsUp, id1-2, id2-2]
-              }));
+          if(board[id1-1][id2-1].player === 'r') {
+            if(board[id1-2][id2-2].player === 'none') {
+              board[id1-2][id2-2].active = true;
+              beatings = [...beatings,id1-2,id2-2];
             }
           }
         }
       }
     }
+    this.setState({availableBeatingsUp: beatings});
+    return beatings;
   }
 
-  checkIfBeatingDownAvailable = (id1, id2, player) => {
+  checkIfBeatingDownAvailable = (board,id1, id2, player) => {
     var empty = [];
+    var beatings = [];
     this.setState({isActivePieceKing: false});
     this.setState({availableBeatingsDown: empty});
-    if(this.state.activePlayer !== this.state.board[id1][id2].player){
+    if(player !== board[id1][id2].player){
       return;
     }
-    if(this.state.activePlayer === 'r'){
+    if(player === 'r'){
       if(id1 > 1) {
         if(id2 < 2) {
-          if(this.state.board[id1-1][id2+1].player === 'b') {
-            if(this.state.board[id1-2][id2+2].player === 'none') {
-              this.state.board[id1-2][id2+2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsDown: [...prevState.availableBeatingsDown, id1-2, id2+2]
-              }));
+          if(board[id1-1][id2+1].player === 'b') {
+            if(board[id1-2][id2+2].player === 'none') {
+              board[id1-2][id2+2].active = true;
+              beatings = [...beatings,id1-2,id2+2];
             }
           }
         }
         if(id2 > 5){
-          if(this.state.board[id1-1][id2-1].player === 'b') {
-            if(this.state.board[id1-2][id2-2].player === 'none') {
-              this.state.board[id1-2][id2-2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsDown: [...prevState.availableBeatingsDown, id1-2, id2-2]
-              }));
+          if(board[id1-1][id2-1].player === 'b') {
+            if(board[id1-2][id2-2].player === 'none') {
+              board[id1-2][id2-2].active = true;
+              beatings = [...beatings,id1-2,id2-2];
             }
           }
         }
         if(id2 >= 2 && id2 <= 5) {
-          if(this.state.board[id1-1][id2+1].player === 'b') {
-            if(this.state.board[id1-2][id2+2].player === 'none') {
-              this.state.board[id1-2][id2+2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsDown: [...prevState.availableBeatingsDown, id1-2, id2+2]
-              }));
+          if(board[id1-1][id2+1].player === 'b') {
+            if(board[id1-2][id2+2].player === 'none') {
+              board[id1-2][id2+2].active = true;
+              beatings = [...beatings,id1-2,id2+2];
             }
           }
-          if(this.state.board[id1-1][id2-1].player === 'b') {
-            if(this.state.board[id1-2][id2-2].player === 'none') {
-              this.state.board[id1-2][id2-2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsDown: [...prevState.availableBeatingsDown, id1-2, id2-2]
-              }));
+          if(board[id1-1][id2-1].player === 'b') {
+            if(board[id1-2][id2-2].player === 'none') {
+              board[id1-2][id2-2].active = true;
+              beatings = [...beatings,id1-2,id2-2];
             }
           }
         }
@@ -412,48 +380,42 @@ class GameBoard extends Component {
     else {
       if(id1 < 6) {
         if(id2 < 2) {
-          if(this.state.board[id1+1][id2+1].player === 'r') {
-            if(this.state.board[id1+2][id2+2].player === 'none') {
-              this.state.board[id1+2][id2+2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsDown: [...prevState.availableBeatingsDown, id1+2, id2+2]
-              }));
+          if(board[id1+1][id2+1].player === 'r') {
+            if(board[id1+2][id2+2].player === 'none') {
+              board[id1+2][id2+2].active = true;
+              beatings = [...beatings,id1+2,id2+2];
             }
           }
         }
         if(id2 > 5){
-          if(this.state.board[id1+1][id2-1].player === 'r') {
-            if(this.state.board[id1+2][id2-2].player === 'none') {
-              this.state.board[id1+2][id2-2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsDown: [...prevState.availableBeatingsDown, id1+2, id2-2]
-              }));
+          if(board[id1+1][id2-1].player === 'r') {
+            if(board[id1+2][id2-2].player === 'none') {
+              board[id1+2][id2-2].active = true;
+              beatings = [...beatings,id1+2,id2-2];
             }
           }
         }
         if (id2 >= 2 && id2 <= 5) {
-          if(this.state.board[id1+1][id2+1].player === 'r') {
-            if(this.state.board[id1+2][id2+2].player === 'none') {
-              this.state.board[id1+2][id2+2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsDown: [...prevState.availableBeatingsDown, id1+2, id2+2]
-              }));
+          if(board[id1+1][id2+1].player === 'r') {
+            if(board[id1+2][id2+2].player === 'none') {
+              board[id1+2][id2+2].active = true;
+              beatings = [...beatings,id1+2,id2+2];
             }
           }
-          if(this.state.board[id1+1][id2-1].player === 'r') {
-            if(this.state.board[id1+2][id2-2].player === 'none') {
-              this.state.board[id1+2][id2-2].active = true;
-              this.setState(prevState => ({
-                availableBeatingsDown: [...prevState.availableBeatingsDown, id1+2, id2-2]
-              }));
+          if(board[id1+1][id2-1].player === 'r') {
+            if(board[id1+2][id2-2].player === 'none') {
+              board[id1+2][id2-2].active = true;
+              beatings = [...beatings,id1+2,id2-2];
             }
           }
         }
       }
     }
+    this.setState({availableBeatingsDown: beatings});
+    return beatings;
   }
 
-  checkIfKingsBeatingAvailable = (id1, id2, player) => {
+  checkIfKingsBeatingAvailable = (board,id1, id2, player) => {
     var empty = [];
     var beatingsUp = [];
     var beatingsDown = [];
@@ -462,25 +424,25 @@ class GameBoard extends Component {
     this.setState({availableBeatingsUp: empty});
     this.setState({availableBeatingsDown: empty})
     this.setState({isActivePieceKing: true});
-    if(this.state.activePlayer !== this.state.board[id1][id2].player){
+    if(player !== board[id1][id2].player){
       return;
     }
-    if(this.state.board[id1][id2].player !== 'none'){
+    if(board[id1][id2].player !== 'none'){
       if(player === 'r') {
         j = id2 + 1;
         k = id2 - 1;
         for(i = id1 - 1; i >= 1; i--) {
           if(j <= 6) {
-            if(this.state.board[i][j].player === 'b') {
-              if(this.state.board[i-1][j+1].player === 'none') {
-                this.state.board[i-1][j+1].active = true;
+            if(board[i][j].player === 'b') {
+              if(board[i-1][j+1].player === 'none') {
+                board[i-1][j+1].active = true;
                 beatingsUp = [...beatingsUp, i-1, j+1];
                 positionToDelete = [...positionToDelete, i, j];
                 i--;
                 j++;
                 while(i >= 1 && j <= 6) {
-                  if(this.state.board[i-1][j+1].player === 'none') {
-                    this.state.board[i-1][j+1].active = true;
+                  if(board[i-1][j+1].player === 'none') {
+                    board[i-1][j+1].active = true;
                     beatingsUp = [...beatingsUp, i-1, j+1];
                   } else {
                     j = 8;
@@ -495,16 +457,16 @@ class GameBoard extends Component {
             } 
           }
           if(k >= 1) {
-            if(this.state.board[i][k].player === 'b') {
-              if(this.state.board[i-1][k-1].player === 'none') {
-                this.state.board[i-1][k-1].active = true;
+            if(board[i][k].player === 'b') {
+              if(board[i-1][k-1].player === 'none') {
+                board[i-1][k-1].active = true;
                 beatingsUp = [...beatingsUp, i-1, k-1];
                 positionToDelete = [...positionToDelete, i, k];
                 i--;
                 k--;
                 while(i >= 1 && k >= 1) {
-                  if(this.state.board[i-1][k-1].player === 'none') {
-                    this.state.board[i-1][k-1].active = true;
+                  if(board[i-1][k-1].player === 'none') {
+                    board[i-1][k-1].active = true;
                     beatingsUp = [...beatingsUp, i-1, k-1];
                   } else {
                     k = -1;
@@ -525,16 +487,16 @@ class GameBoard extends Component {
         k = id2 - 1;
         for(i = id1 + 1; i <=6; i++) {
           if(j <= 6) {
-            if(this.state.board[i][j].player === 'b') {
-              if(this.state.board[i+1][j+1].player === 'none') {
-                this.state.board[i+1][j+1].active = true;
+            if(board[i][j].player === 'b') {
+              if(board[i+1][j+1].player === 'none') {
+                board[i+1][j+1].active = true;
                 beatingsDown = [...beatingsDown, i+1, j+1];
                 positionToDelete = [...positionToDelete, i, j];
                 i++;
                 j++;
                 while(i <= 6 && j <= 6) {
-                  if(this.state.board[i+1][j+1].player === 'none') {
-                    this.state.board[i+1][j+1].active = true;
+                  if(board[i+1][j+1].player === 'none') {
+                    board[i+1][j+1].active = true;
                     beatingsUp = [...beatingsUp, i+1, j+1];
                   } else {
                     j = 8;
@@ -549,16 +511,16 @@ class GameBoard extends Component {
             } 
           }
           if(k >= 1) {
-            if(this.state.board[i][k].player === 'b') {
-              if(this.state.board[i+1][k-1].player === 'none') {
-                this.state.board[i+1][k-1].active = true;
+            if(board[i][k].player === 'b') {
+              if(board[i+1][k-1].player === 'none') {
+                board[i+1][k-1].active = true;
                 beatingsDown = [...beatingsDown, i+1, k-1];
                 positionToDelete = [...positionToDelete, i, k];
                 i++;
                 k--;
                 while(i <= 6 && k >= 1) {
-                  if(this.state.board[i+1][k-1].player === 'none') {
-                    this.state.board[i+1][k-1].active = true;
+                  if(board[i+1][k-1].player === 'none') {
+                    board[i+1][k-1].active = true;
                     beatingsUp = [...beatingsUp, i+1, k-1];
                   } else {
                     k = -1;
@@ -580,16 +542,16 @@ class GameBoard extends Component {
         k = id2 - 1;
         for(i = id1 + 1; i <=6; i++) {
           if(j <= 6) {
-            if(this.state.board[i][j].player === 'r') {
-              if(this.state.board[i+1][j+1].player === 'none') {
-                this.state.board[i+1][j+1].active = true;
+            if(board[i][j].player === 'r') {
+              if(board[i+1][j+1].player === 'none') {
+                board[i+1][j+1].active = true;
                 beatingsUp = [...beatingsUp, i+1, j+1];
                 positionToDelete = [...positionToDelete, i, j];
                 i++;
                 j++;
                 while(i <= 6 && j <= 6) {
-                  if(this.state.board[i+1][j+1].player === 'none') {
-                    this.state.board[i+1][j+1].active = true;
+                  if(board[i+1][j+1].player === 'none') {
+                    board[i+1][j+1].active = true;
                     beatingsUp = [...beatingsUp, i+1, j+1];
                   } else {
                     j = 8;
@@ -604,16 +566,16 @@ class GameBoard extends Component {
             } 
           }
           if(k >= 1) {
-            if(this.state.board[i][k].player === 'r') {
-              if(this.state.board[i+1][k-1].player === 'none') {
-                this.state.board[i+1][k-1].active = true;
+            if(board[i][k].player === 'r') {
+              if(board[i+1][k-1].player === 'none') {
+                board[i+1][k-1].active = true;
                 beatingsUp = [...beatingsUp, i+1, k-1];
                 positionToDelete = [...positionToDelete, i, k];
                 i++;
                 k--;
                 while(i <= 6 && k >= 1) {
-                  if(this.state.board[i+1][k-1].player === 'none') {
-                    this.state.board[i+1][k-1].active = true;
+                  if(board[i+1][k-1].player === 'none') {
+                    board[i+1][k-1].active = true;
                     beatingsUp = [...beatingsUp, i+1, k-1];
                   } else {
                     k = -1;
@@ -634,16 +596,16 @@ class GameBoard extends Component {
         k = id2 - 1;
         for(i = id1 - 1; i >= 1; i--) {
           if(j <= 6) {
-            if(this.state.board[i][j].player === 'r') {
-              if(this.state.board[i-1][j+1].player === 'none') {
-                this.state.board[i-1][j+1].active = true;
+            if(board[i][j].player === 'r') {
+              if(board[i-1][j+1].player === 'none') {
+                board[i-1][j+1].active = true;
                 beatingsDown = [...beatingsDown, i-1, j+1];
                 positionToDelete = [...positionToDelete, i, j];
                 i--;
                 j++;
                 while(i >= 1 && j <= 6) {
-                  if(this.state.board[i-1][j+1].player === 'none') {
-                    this.state.board[i-1][j+1].active = true;
+                  if(board[i-1][j+1].player === 'none') {
+                    board[i-1][j+1].active = true;
                     beatingsUp = [...beatingsUp, i-1, j+1];
                   } else {
                     j = 8;
@@ -658,16 +620,16 @@ class GameBoard extends Component {
             }
           }
           if(k >= 1) {
-            if(this.state.board[i][k].player === 'r') {
-              if(this.state.board[i-1][k-1].player === 'none') {
-                this.state.board[i-1][k-1].active = true;
+            if(board[i][k].player === 'r') {
+              if(board[i-1][k-1].player === 'none') {
+                board[i-1][k-1].active = true;
                 beatingsDown = [...beatingsDown, i-1, k-1];
                 positionToDelete = [...positionToDelete, i, k];
                 i--;
                 k--;
                 while(i >= 1 && k >= 1) {
-                  if(this.state.board[i-1][k-1].player === 'none') {
-                    this.state.board[i-1][k-1].active = true;
+                  if(board[i-1][k-1].player === 'none') {
+                    board[i-1][k-1].active = true;
                     beatingsUp = [...beatingsUp, i-1, k-1];
                   } else {
                     k = -1;
@@ -689,6 +651,7 @@ class GameBoard extends Component {
     this.setState({idsToBeat: positionToDelete});
     this.setState({availableBeatingsUp: beatingsUp});
     this.setState({availableBeatingsDown: beatingsDown});
+    return (beatingsUp.concat(beatingsDown));
   }
 
   didRedWon = () => {
@@ -716,12 +679,13 @@ class GameBoard extends Component {
 
   activatePiece = (value) => {
     //get id of first and second table from clicked button's id
+    this.makeAIMove();
     var id1 = Math.floor(value/10) - 1;
     var id2 = value % 10 - 1;
     this.shouldGameEnd();
     if(this.state.isActivePieceKing) {
-      this.setPossibleKingMoves(id1, id2, this.state.activePlayer);
-      this.checkIfKingsBeatingAvailable(id1, id2, this.state.activePlayer);
+      this.setPossibleKingMoves(this.state.board,id1, id2, this.state.activePlayer);
+      this.checkIfKingsBeatingAvailable(this.state.board,id1, id2, this.state.activePlayer);
       if( this.state.board[id1][id2].player === 'none' && 
           this.state.possibleMovesIds.length !== 0 && this.state.board[id1][id2].color === 'black'){
         var i, j = 1, isCorrectCell = false;
@@ -736,7 +700,7 @@ class GameBoard extends Component {
           this.state.board[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
           this.state.board[id1][id2].type = 'king';
           this.setState({isActivePieceKing: false});
-          this.performMove(id1, id2);
+          this.performMove(this.state.board,id1, id2,true,[]);
           return;
         }
       }
@@ -764,7 +728,7 @@ class GameBoard extends Component {
           this.state.board[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
           this.state.board[id1][id2].type = 'king';
           this.setState({isActivePieceKing: false});
-          this.performBeating(id1, id2); 
+          this.performBeating(this.state.board,id1, id2,true,[]); 
           this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
           if(nextTurn) {
             this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'});
@@ -774,9 +738,9 @@ class GameBoard extends Component {
       }
     }
     if(this.state.board[id1][id2].type === 'pon'){
-      this.setPossibleMoves(id1, id2, this.state.activePlayer);
-      this.checkIfBeatingUpAvailable(id1, id2, this.state.activePlayer);
-      this.checkIfBeatingDownAvailable(id1, id2, this.state.activePlayer);
+      this.setPossibleMoves(this.state.board,id1, id2, this.state.activePlayer);
+      this.checkIfBeatingUpAvailable(this.state.board,id1, id2, this.state.activePlayer);
+      this.checkIfBeatingDownAvailable(this.state.board,id1, id2, this.state.activePlayer);
       if( this.state.board[id1][id2].player === 'none' && 
           this.state.possibleMovesIds.length !== 0 && this.state.board[id1][id2].color === 'black'){
         var i, j = 1, isCorrectCell = false;
@@ -788,7 +752,7 @@ class GameBoard extends Component {
           j = j+2;
         }
         if(isCorrectCell) {
-          this.performMove(id1, id2);
+          this.performMove(this.state.board,id1, id2,true,[]);
           if(id1 === 7 && this.state.activePlayer === 'b' || id1 === 0 && this.state.activePlayer === 'r') {
             this.state.board[id1][id2].type = 'king';
           }
@@ -816,7 +780,7 @@ class GameBoard extends Component {
         }
         if(isCorrectCell) {
           var nextTurn = true;
-          this.performBeating(id1, id2); 
+          this.performBeating(this.state.board,id1, id2,true,[]); 
           this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
           if(nextTurn) {
             this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'})
@@ -827,67 +791,213 @@ class GameBoard extends Component {
         }
       }
     } else {
-      this.setPossibleKingMoves(id1, id2, this.state.activePlayer);
-      this.checkIfKingsBeatingAvailable(id1, id2, this.state.activePlayer);
+      this.setPossibleKingMoves(this.state.board,id1, id2, this.state.activePlayer);
+      this.checkIfKingsBeatingAvailable(this.state.board,id1, id2, this.state.activePlayer);
     }
   }
 
-  performBeating = (id1, id2) => {
+  performBeating = (board,id1, id2,isReal,prevPosition) => {
     var prevPos = [id1, id2];
-    var tmpBoard = [...this.state.board];
+    var tmpBoard = [...board];
     tmpBoard[id1][id2].player = this.state.activePlayer;
-    tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].player = 'none';
-    tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
-    if(this.state.isActivePieceKing) {
-      tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].player = 'none';
-      tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].type = 'pon';
-    } else {
-      if(id1 > this.state.previousPiecePosition[0]) {
-        if(id2 > this.state.previousPiecePosition[1]) {
-          tmpBoard[id1-1][id2-1].player = 'none';
-          tmpBoard[id1-1][id2-1].type = 'pon';
-        } else {
-          tmpBoard[id1-1][id2+1].player = 'none';
-          tmpBoard[id1-1][id2+1].type = 'pon';
-        }
+    if(isReal){
+      tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].player = 'none';
+      tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
+      if(this.state.isActivePieceKing) {
+        tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].player = 'none';
+        tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].type = 'pon';
       } else {
-        
-        if(id2 > this.state.previousPiecePosition[1]) {
-          tmpBoard[id1+1][id2-1].player = 'none';
-          tmpBoard[id1+1][id2-1].type = 'pon';
+        if(id1 > this.state.previousPiecePosition[0]) {
+          if(id2 > this.state.previousPiecePosition[1]) {
+            tmpBoard[id1-1][id2-1].player = 'none';
+            tmpBoard[id1-1][id2-1].type = 'pon';
+          } else {
+            tmpBoard[id1-1][id2+1].player = 'none';
+            tmpBoard[id1-1][id2+1].type = 'pon';
+          }
         } else {
-          tmpBoard[id1+1][id2+1].player = 'none';
-          tmpBoard[id1+1][id2+1].type = 'pon';
+          
+          if(id2 > this.state.previousPiecePosition[1]) {
+            tmpBoard[id1+1][id2-1].player = 'none';
+            tmpBoard[id1+1][id2-1].type = 'pon';
+          } else {
+            tmpBoard[id1+1][id2+1].player = 'none';
+            tmpBoard[id1+1][id2+1].type = 'pon';
+          }
+        }
+      }
+    } else {
+      tmpBoard[prevPosition[0]][prevPosition[1]].player = 'none';
+      tmpBoard[prevPosition[0]][prevPosition[1]].type = 'pon';
+      if(this.state.isActivePieceKing) {
+        tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].player = 'none';
+        tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].type = 'pon';
+      } else {
+        if(id1 > prevPosition[0]) {
+          if(id2 > prevPosition[1]) {
+            tmpBoard[id1-1][id2-1].player = 'none';
+            tmpBoard[id1-1][id2-1].type = 'pon';
+          } else {
+            tmpBoard[id1-1][id2+1].player = 'none';
+            tmpBoard[id1-1][id2+1].type = 'pon';
+          }
+        } else {
+          
+          if(id2 > prevPosition[1]) {
+            tmpBoard[id1+1][id2-1].player = 'none';
+            tmpBoard[id1+1][id2-1].type = 'pon';
+          } else {
+            tmpBoard[id1+1][id2+1].player = 'none';
+            tmpBoard[id1+1][id2+1].type = 'pon';
+          }
         }
       }
     }
     if(this.state.isActivePieceKing) {
-      this.checkIfKingsBeatingAvailable(id1,id2, this.state.activePlayer);
+      this.checkIfKingsBeatingAvailable(this.state.board,id1,id2, this.state.activePlayer);
     } else {
-      this.checkIfBeatingUpAvailable(id1, id2, this.state.activePlayer);
-      this.checkIfBeatingDownAvailable(id1, id2, this.state.activePlayer);
+      this.checkIfBeatingUpAvailable(this.state.board,id1, id2, this.state.activePlayer);
+      this.checkIfBeatingDownAvailable(this.state.board,id1, id2, this.state.activePlayer);
     }
-    this.setState({
-      board: tmpBoard,
-      previousPiecePosition: prevPos
-    });
-    this.renderCells;
+    if(isReal) {
+      this.setState({
+        board: tmpBoard,
+        previousPiecePosition: prevPos
+      });
+      this.renderCells;
+    } 
+    return tmpBoard;
   }
 
-  performMove = (id1, id2) => {
+  performMove = (board,id1, id2,isReal, prevPosition) => {
     var empty = [];
-    var tmpBoard = [...this.state.board];
+    var tmpBoard = [...board];
     tmpBoard[id1][id2].player = this.state.activePlayer;
-    tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].player = 'none';
-    this.setState({
-      board: tmpBoard,
-      activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r',
-      previousPiecePosition: empty
-    });
-    this.renderCells;
+    if(isReal) {
+      tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].player = 'none';
+      this.setState({
+        board: tmpBoard,
+        activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r',
+        previousPiecePosition: empty
+      });
+      this.renderCells;
+    } else {
+      tmpBoard[prevPosition[0]][prevPosition[1]].player = 'none';
+    }
+    return tmpBoard
   }
 
-  
+  getAllMoves = (player,board) => {
+    var tmpBoard = board;
+    var moves = [];
+    var kingMoves = [];
+    var beatings = [];
+    var kingBeatings = [];
+    var nodeArray = [];
+    tmpBoard.map(row => row.map(cell => {if(player === cell.player) {
+      var id1 = Math.floor(cell.id/10) - 1;
+      var id2 = cell.id % 10 - 1;
+      var node = {};
+      var i,j=1;
+      tmpBoard = board;
+      if(cell.type === 'pon') {
+        moves = this.setPossibleMoves(tmpBoard,id1,id2,player);
+        beatings = this.checkIfBeatingUpAvailable(tmpBoard,id1,id2,player);
+        beatings = beatings.concat(this.checkIfBeatingDownAvailable(tmpBoard,id1,id2,player));
+        for(i=0;i<moves.length/2;i++) {
+          tmpBoard = this.performMove(tmpBoard,moves[i],moves[j],false,[id1,id2]);
+          if(player === 'b') {
+            if(moves[i] === 7) {
+              node = {
+                value:  25,
+                board: tmpBoard,
+                children: []
+              }
+            } else {
+              node = {
+                value:  1,
+                board: tmpBoard,
+                children: []
+              }
+            }
+          } else {
+            if(moves[i] === 0) {
+              node = {
+                value:  25,
+                board: tmpBoard,
+                children: []
+              }
+            } else {
+              node = {
+                value:  1,
+                board: tmpBoard,
+                children: []
+              }
+            }
+          }
+        j++;
+        tmpBoard = board;
+        nodeArray = [...nodeArray,node];
+        }
+        j = 1;
+        for(i=0;i<beatings.length/2;i++) {
+          this.performBeating(tmpBoard,beatings[i],beatings[j],false,[id1,id2]);
+          node = {
+            value: 10,
+            children: []  
+          }
+          j++;
+          tmpBoard = board;
+          nodeArray = [...nodeArray,node];
+        }
+      } else {
+        kingMoves = this.setPossibleKingMoves(tmpBoard,id1,id2,player);
+        kingBeatings = this.checkIfKingsBeatingAvailable(tmpBoard,id1,id2,player);
+        for(i=0;i<moves.length/2;i++) {
+          this.performMove(tmpBoard,kingMoves[i],kingMoves[j],false,[id1,id2]);
+          node = {
+            value: 1,
+            children: []
+          }
+          j++;
+          tmpBoard = board;
+          nodeArray = [...nodeArray,node];
+        }
+        j = 1;
+        for(i=0;i<kingBeatings.length/2;i++) {
+          this.performBeating(tmpBoard,kingBeatings[i],kingBeatings[j],false,[id1,id2]);
+          node = {
+            value: 10,
+            children: []  
+          }
+          j++;
+          tmpBoard = board;
+          nodeArray = [...nodeArray,node];
+        }
+      }
+    }}));
+    tmpBoard.map(row => row.map(cell => {cell.active = false}));
+    return nodeArray;
+  }
+
+  createNextTreeLevel = (node, board, player) => {
+    node.children.forEach( child => {
+      child.children = this.getAllMoves(player,board);
+    });
+  }
+
+  makeAIMove = () => {
+    var Node = {
+      value: 0,
+      board: data,
+      children: []
+    }
+    console.log(data);
+    Node.children = this.getAllMoves('b',data);
+    console.log(Node);
+    // this.createNextTreeLevel(Node, data, 'r');
+    // console.log(Node);
+  } 
 
   render() {
     return (
