@@ -888,18 +888,17 @@ class GameBoard extends Component {
   }
 
   getAllMoves = (player,board) => {
-    var tmpBoard = board;
+    var tmpBoard = JSON.parse(JSON.stringify(board));
     var moves = [];
     var kingMoves = [];
     var beatings = [];
     var kingBeatings = [];
     var nodeArray = [];
-    tmpBoard.map(row => row.map(cell => {if(player === cell.player) {
+    board.map(row => row.map(cell => {if(player === cell.player) {
       var id1 = Math.floor(cell.id/10) - 1;
       var id2 = cell.id % 10 - 1;
       var node = {};
       var i,j=1;
-      tmpBoard = board;
       if(cell.type === 'pon') {
         moves = this.setPossibleMoves(tmpBoard,id1,id2,player);
         beatings = this.checkIfBeatingUpAvailable(tmpBoard,id1,id2,player);
@@ -936,47 +935,47 @@ class GameBoard extends Component {
             }
           }
         j++;
-        tmpBoard = board;
+        tmpBoard = JSON.parse(JSON.stringify(board))
         nodeArray = [...nodeArray,node];
         }
         j = 1;
         for(i=0;i<beatings.length/2;i++) {
-          this.performBeating(tmpBoard,beatings[i],beatings[j],false,[id1,id2]);
+          tmpBoard = this.performBeating(tmpBoard,beatings[i],beatings[j],false,[id1,id2]);
           node = {
             value: 10,
             children: []  
           }
           j++;
-          tmpBoard = board;
+          tmpBoard = JSON.parse(JSON.stringify(board))
           nodeArray = [...nodeArray,node];
         }
       } else {
         kingMoves = this.setPossibleKingMoves(tmpBoard,id1,id2,player);
         kingBeatings = this.checkIfKingsBeatingAvailable(tmpBoard,id1,id2,player);
         for(i=0;i<moves.length/2;i++) {
-          this.performMove(tmpBoard,kingMoves[i],kingMoves[j],false,[id1,id2]);
+          tmpBoard = this.performMove(tmpBoard,kingMoves[i],kingMoves[j],false,[id1,id2]);
           node = {
             value: 1,
             children: []
           }
           j++;
-          tmpBoard = board;
+          tmpBoard = JSON.parse(JSON.stringify(tmpBoard))
           nodeArray = [...nodeArray,node];
         }
         j = 1;
         for(i=0;i<kingBeatings.length/2;i++) {
-          this.performBeating(tmpBoard,kingBeatings[i],kingBeatings[j],false,[id1,id2]);
+          tmpBoard = this.performBeating(tmpBoard,kingBeatings[i],kingBeatings[j],false,[id1,id2]);
           node = {
             value: 10,
             children: []  
           }
           j++;
-          tmpBoard = board;
+          tmpBoard = JSON.parse(JSON.stringify(tmpBoard))
           nodeArray = [...nodeArray,node];
         }
       }
     }}));
-    tmpBoard.map(row => row.map(cell => {cell.active = false}));
+    board.map(row => row.map(cell => {cell.active = false}));
     return nodeArray;
   }
 
@@ -987,13 +986,14 @@ class GameBoard extends Component {
   }
 
   makeAIMove = () => {
+    var tmpBoard = JSON.parse(JSON.stringify(this.state.board));
+    console.log(tmpBoard);
     var Node = {
       value: 0,
-      board: data,
+      board: tmpBoard,
       children: []
     }
-    console.log(data);
-    Node.children = this.getAllMoves('b',data);
+    Node.children = this.getAllMoves('b',tmpBoard);
     console.log(Node);
     // this.createNextTreeLevel(Node, data, 'r');
     // console.log(Node);
