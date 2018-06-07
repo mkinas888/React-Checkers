@@ -14,7 +14,7 @@ class GameBoard extends Component {
       previousPiecePosition: [],
       possibleMovesIds: [],
       availableBeatingsUp: [],
-      availableBeatingsDown: [] 
+      availableBeatingsDown: []
     };
   }
 
@@ -679,120 +679,123 @@ class GameBoard extends Component {
 
   activatePiece = (value) => {
     //get id of first and second table from clicked button's id
-    this.makeAIMove();
-    var id1 = Math.floor(value/10) - 1;
-    var id2 = value % 10 - 1;
-    this.shouldGameEnd();
-    if(this.state.isActivePieceKing) {
-      this.setPossibleKingMoves(this.state.board,id1, id2, this.state.activePlayer);
-      this.checkIfKingsBeatingAvailable(this.state.board,id1, id2, this.state.activePlayer);
-      if( this.state.board[id1][id2].player === 'none' && 
-          this.state.possibleMovesIds.length !== 0 && this.state.board[id1][id2].color === 'black'){
-        var i, j = 1, isCorrectCell = false;
-        for(i = 0; i < this.state.possibleMovesIds.length; i++) {
-          if(id1 === this.state.possibleMovesIds[i] && id2 === this.state.possibleMovesIds[j]) {
-            isCorrectCell = true;
+    if(this.state.activePlayer === 'r'){
+      var id1 = Math.floor(value/10) - 1;
+      var id2 = value % 10 - 1;
+      this.shouldGameEnd();
+      if(this.state.isActivePieceKing) {
+        this.setPossibleKingMoves(this.state.board,id1, id2, this.state.activePlayer);
+        this.checkIfKingsBeatingAvailable(this.state.board,id1, id2, this.state.activePlayer);
+        if( this.state.board[id1][id2].player === 'none' && 
+            this.state.possibleMovesIds.length !== 0 && this.state.board[id1][id2].color === 'black'){
+          var i, j = 1, isCorrectCell = false;
+          for(i = 0; i < this.state.possibleMovesIds.length; i++) {
+            if(id1 === this.state.possibleMovesIds[i] && id2 === this.state.possibleMovesIds[j]) {
+              isCorrectCell = true;
+            }
+            i++;
+            j = j+2;
           }
-          i++;
-          j = j+2;
-        }
-        if(isCorrectCell) {
-          this.state.board[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
-          this.state.board[id1][id2].type = 'king';
-          this.setState({isActivePieceKing: false});
-          this.performMove(this.state.board,id1, id2,true,[],this.state.activePlayer);
-          return;
-        }
-      }
-      if (this.state.board[id1][id2].player === 'none' && this.state.board[id1][id2].color === 'black'&&  
-      (this.state.availableBeatingsUp.length !== 0 || this.state.availableBeatingsDown.length !==0)) {
-        j = 1;
-        isCorrectCell = false;
-        for(i = 0; i < this.state.availableBeatingsUp.length; i++) {
-          if(id1 === this.state.availableBeatingsUp[i] && id2 === this.state.availableBeatingsUp[j]) {
-            isCorrectCell = true;
-          }
-          i++;
-          j = j+2;
-        }
-        j = 1;
-        for(i = 0; i < this.state.availableBeatingsDown.length; i++) {
-          if(id1 === this.state.availableBeatingsDown[i] && id2 === this.state.availableBeatingsDown[j]) {
-            isCorrectCell = true;
-          }
-          i++;
-          j = j+2;
-        }
-        if(isCorrectCell) {
-          var nextTurn = true;
-          this.state.board[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
-          this.state.board[id1][id2].type = 'king';
-          this.setState({isActivePieceKing: false});
-          this.performBeating(this.state.board,id1, id2,true,[],this.state.activePlayer); 
-          this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
-          if(nextTurn) {
-            this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'});
-          } 
-          return;
-        }
-      }
-    }
-    if(this.state.board[id1][id2].type === 'pon'){
-      this.setPossibleMoves(this.state.board,id1, id2, this.state.activePlayer);
-      this.checkIfBeatingUpAvailable(this.state.board,id1, id2, this.state.activePlayer);
-      this.checkIfBeatingDownAvailable(this.state.board,id1, id2, this.state.activePlayer);
-      if( this.state.board[id1][id2].player === 'none' && 
-          this.state.possibleMovesIds.length !== 0 && this.state.board[id1][id2].color === 'black'){
-        var i, j = 1, isCorrectCell = false;
-        for(i = 0; i < this.state.possibleMovesIds.length; i++) {
-          if(id1 === this.state.possibleMovesIds[i] && id2 === this.state.possibleMovesIds[j]) {
-            isCorrectCell = true;
-          }
-          i++;
-          j = j+2;
-        }
-        if(isCorrectCell) {
-          this.performMove(this.state.board,id1, id2,true,[],this.state.activePlayer);
-          if(id1 === 7 && this.state.activePlayer === 'b' || id1 === 0 && this.state.activePlayer === 'r') {
+          if(isCorrectCell) {
+            this.state.board[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
             this.state.board[id1][id2].type = 'king';
+            this.setState({isActivePieceKing: false});
+            this.performMove(this.state.board,id1, id2,true,[],this.state.activePlayer);
+            return;
           }
-          return;
+        }
+        if (this.state.board[id1][id2].player === 'none' && this.state.board[id1][id2].color === 'black'&&  
+        (this.state.availableBeatingsUp.length !== 0 || this.state.availableBeatingsDown.length !==0)) {
+          j = 1;
+          isCorrectCell = false;
+          for(i = 0; i < this.state.availableBeatingsUp.length; i++) {
+            if(id1 === this.state.availableBeatingsUp[i] && id2 === this.state.availableBeatingsUp[j]) {
+              isCorrectCell = true;
+            }
+            i++;
+            j = j+2;
+          }
+          j = 1;
+          for(i = 0; i < this.state.availableBeatingsDown.length; i++) {
+            if(id1 === this.state.availableBeatingsDown[i] && id2 === this.state.availableBeatingsDown[j]) {
+              isCorrectCell = true;
+            }
+            i++;
+            j = j+2;
+          }
+          if(isCorrectCell) {
+            var nextTurn = true;
+            this.state.board[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
+            this.state.board[id1][id2].type = 'king';
+            this.setState({isActivePieceKing: false});
+            this.performBeating(this.state.board,id1, id2,true,[],this.state.activePlayer); 
+            this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
+            if(nextTurn) {
+              this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'});
+            } 
+            return;
+          }
         }
       }
-      if (this.state.board[id1][id2].player === 'none' && this.state.board[id1][id2].color === 'black'&&  
-      (this.state.availableBeatingsUp.length !== 0 || this.state.availableBeatingsDown.length !==0)) {
-        j = 1;
-        isCorrectCell = false;
-        for(i = 0; i < this.state.availableBeatingsUp.length; i++) {
-          if(id1 === this.state.availableBeatingsUp[i] && id2 === this.state.availableBeatingsUp[j]) {
-            isCorrectCell = true;
+      if(this.state.board[id1][id2].type === 'pon'){
+        this.setPossibleMoves(this.state.board,id1, id2, this.state.activePlayer);
+        this.checkIfBeatingUpAvailable(this.state.board,id1, id2, this.state.activePlayer);
+        this.checkIfBeatingDownAvailable(this.state.board,id1, id2, this.state.activePlayer);
+        if( this.state.board[id1][id2].player === 'none' && 
+            this.state.possibleMovesIds.length !== 0 && this.state.board[id1][id2].color === 'black'){
+          var i, j = 1, isCorrectCell = false;
+          for(i = 0; i < this.state.possibleMovesIds.length; i++) {
+            if(id1 === this.state.possibleMovesIds[i] && id2 === this.state.possibleMovesIds[j]) {
+              isCorrectCell = true;
+            }
+            i++;
+            j = j+2;
           }
-          i++;
-          j = j+2;
-        }
-        j = 1;
-        for(i = 0; i < this.state.availableBeatingsDown.length; i++) {
-          if(id1 === this.state.availableBeatingsDown[i] && id2 === this.state.availableBeatingsDown[j]) {
-            isCorrectCell = true;
-          }
-          i++;
-          j = j+2;
-        }
-        if(isCorrectCell) {
-          var nextTurn = true;
-          this.performBeating(this.state.board,id1, id2,true,[],this.state.activePlayer); 
-          this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
-          if(nextTurn) {
-            this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'})
+          if(isCorrectCell) {
+            this.performMove(this.state.board,id1, id2,true,[],this.state.activePlayer);
             if(id1 === 7 && this.state.activePlayer === 'b' || id1 === 0 && this.state.activePlayer === 'r') {
               this.state.board[id1][id2].type = 'king';
             }
-          } 
+            return;
+          }
         }
+        if (this.state.board[id1][id2].player === 'none' && this.state.board[id1][id2].color === 'black'&&  
+        (this.state.availableBeatingsUp.length !== 0 || this.state.availableBeatingsDown.length !==0)) {
+          j = 1;
+          isCorrectCell = false;
+          for(i = 0; i < this.state.availableBeatingsUp.length; i++) {
+            if(id1 === this.state.availableBeatingsUp[i] && id2 === this.state.availableBeatingsUp[j]) {
+              isCorrectCell = true;
+            }
+            i++;
+            j = j+2;
+          }
+          j = 1;
+          for(i = 0; i < this.state.availableBeatingsDown.length; i++) {
+            if(id1 === this.state.availableBeatingsDown[i] && id2 === this.state.availableBeatingsDown[j]) {
+              isCorrectCell = true;
+            }
+            i++;
+            j = j+2;
+          }
+          if(isCorrectCell) {
+            var nextTurn = true;
+            this.performBeating(this.state.board,id1, id2,true,[],this.state.activePlayer); 
+            this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
+            if(nextTurn) {
+              this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'})
+              if(id1 === 7 && this.state.activePlayer === 'b' || id1 === 0 && this.state.activePlayer === 'r') {
+                this.state.board[id1][id2].type = 'king';
+              }
+            } 
+          }
+        }
+      } else {
+        this.setPossibleKingMoves(this.state.board,id1, id2, this.state.activePlayer);
+        this.checkIfKingsBeatingAvailable(this.state.board,id1, id2, this.state.activePlayer);
       }
     } else {
-      this.setPossibleKingMoves(this.state.board,id1, id2, this.state.activePlayer);
-      this.checkIfKingsBeatingAvailable(this.state.board,id1, id2, this.state.activePlayer);
+      this.makeAIMove('b');
     }
   }
 
@@ -949,16 +952,18 @@ class GameBoard extends Component {
             var l = 1;
             for(var k=0;k<multiBeatings.length;k++) {
               tmpBoard = this.performBeating(tmpBoard,multiBeatings[k],multiBeatings[l],false,[beatings[i],beatings[j]],player);
-              node = {
-                value: 20,
-                children: []  
-              }
               k++;
               l = l+2;
+            }
+            node = {
+              value: 10*k,
+              board: tmpBoard,
+              children: []  
             }
           } else {
             node = {
               value: 10,
+              board: tmpBoard,
               children: []  
             }
           }
@@ -974,6 +979,7 @@ class GameBoard extends Component {
           tmpBoard = this.performMove(tmpBoard,kingMoves[i],kingMoves[j],false,[id1,id2],player);
           node = {
             value: 1,
+            board: tmpBoard,
             children: []
           }
           i++;
@@ -989,16 +995,18 @@ class GameBoard extends Component {
             var l = 1;
             for(var k=0;k<multiBeatings.length;k++) {
               tmpBoard = this.performBeating(tmpBoard,multiBeatings[k],multiBeatings[l],false,[kingBeatings[i],kingBeatings[j]],player);
-              node = {
-                value: 20,
-                children: []  
-              }
               k++;
               l = l+2;
+            }
+            node = {
+              value: 10*k,
+              board: tmpBoard,
+              children: []  
             }
           } else {
             node = {
               value: 10,
+              board: tmpBoard,
               children: []  
             }
           }
@@ -1019,18 +1027,67 @@ class GameBoard extends Component {
     });
   }
 
-  makeAIMove = () => {
+  minimax = (depth, nodeIndex, isMaximizingPlayer, node, alpha, beta) => {
+    
+    if(depth === 5) {
+      return node.value;
+    }
+    if(isMaximizingPlayer) {
+      var best = -10000;
+      for(var i = 0; i < node.children.length-1; i++) {
+        var val = this.minimax( depth+1, i, false, node.children[i], alpha, beta);
+        best = Math.max(best, val);
+        alpha = Math.max(alpha, best);
+        if(beta <= alpha) {
+          break;
+        }
+      };
+      return best;
+    } else {
+      var best = 10000;
+      for(var i = 0; i < node.children.length-1; i++) { 
+        var val = this.minimax( depth+1, i, true, node.children[i], alpha, beta);
+        best = Math.min(best, val);
+        alpha = Math.min(alpha, best);
+        if(beta <= alpha) {
+          break;
+        }
+      }
+      return best;
+    }
+  }
+ 
+  makeAIMove = (player) => {
+    var maxPlayer = player;
+    var minPlayer = player === 'r' ? 'b' : 'r';
     var tmpBoard = JSON.parse(JSON.stringify(this.state.board));
-    console.log(tmpBoard);
     var Node = {
       value: 0,
       board: tmpBoard,
       children: []
     }
-    Node.children = this.getAllMoves('r',tmpBoard);
+    // first level
+    Node.children = this.getAllMoves(maxPlayer,tmpBoard);
+    this.createNextTreeLevel(Node,minPlayer);
+    Node.children.forEach(child => {
+      this.createNextTreeLevel(child,maxPlayer);
+      child.children.forEach( child => {
+        this.createNextTreeLevel(child, minPlayer);
+        child.children.forEach( child => {
+          this.createNextTreeLevel(child, maxPlayer);
+          // child.children.forEach( child => {
+          //   this.createNextTreeLevel(child, minPlayer);
+            // child.children.forEach( child => {
+            //   this.createNextTreeLevel(child, maxPlayer);
+            // })
+          // })
+        })
+      })
+    });
+    var lol = this.minimax(0, 0, true, Node, -10000, 10000);
     console.log(Node);
-    this.createNextTreeLevel(Node,'b');
-    // console.log(Node);
+    console.log(lol);
+    this.setState({board: Node.children[6].board});
   } 
 
   render() {
