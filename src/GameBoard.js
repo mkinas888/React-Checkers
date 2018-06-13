@@ -934,7 +934,7 @@ class GameBoard extends Component {
     return blackPiecesNumber;
   }
 
-  getAllMoves = (player,board) => {
+  getAllMoves = (player,board, value) => {
     var tmpBoard = JSON.parse(JSON.stringify(board));
     var moves = [];
     var kingMoves = [];
@@ -957,7 +957,7 @@ class GameBoard extends Component {
           if(player === 'b') {
             if(this.didBlackWon()) {
               node = {
-                value:  1000,
+                value:  value + 1000,
                 board: tmpBoard,
                 children: []
               }
@@ -965,13 +965,13 @@ class GameBoard extends Component {
               currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
               if(moves[i] === 7) {
                 node = {
-                  value:  25 + currentPiecesNumber,
+                  value:  value + 25 + currentPiecesNumber,
                   board: tmpBoard,
                   children: []
                 }
               } else {
                 node = {
-                  value:  1 + currentPiecesNumber,
+                  value:  value + 1 + currentPiecesNumber,
                   board: tmpBoard,
                   children: []
                 } 
@@ -980,7 +980,7 @@ class GameBoard extends Component {
           } else {
             if(this.didRedWon()) {
               node = {
-                value:  1000,
+                value:  value - 1000,
                 board: tmpBoard,
                 children: []
               }
@@ -988,13 +988,13 @@ class GameBoard extends Component {
               currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
               if(moves[i] === 0) {
                 node = {
-                  value:  25 + currentPiecesNumber,
+                  value:  value - 25 - currentPiecesNumber,
                   board: tmpBoard,
                   children: []
                 }
               } else {
                 node = {
-                  value:  1 + currentPiecesNumber,
+                  value:  value - 1 - currentPiecesNumber,
                   board: tmpBoard,
                   children: []
                 }
@@ -1021,14 +1021,14 @@ class GameBoard extends Component {
             if(player === 'b') {
               currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
               node = {
-                value: 10*k + currentPiecesNumber,
+                value: value + 10*k + currentPiecesNumber,
                 board: tmpBoard,
                 children: []  
               }
             } else {
               currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
               node = {
-                value: 10*k + currentPiecesNumber,
+                value: value - 10*k - currentPiecesNumber,
                 board: tmpBoard,
                 children: []  
               }
@@ -1037,14 +1037,14 @@ class GameBoard extends Component {
             if(player === 'b') {
               currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
               node = {
-                value: 10 + currentPiecesNumber,
+                value: value + 10 + currentPiecesNumber,
                 board: tmpBoard,
                 children: []  
               }
             } else {
               currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
               node = {
-                value: 10 + currentPiecesNumber,
+                value: value - 10 - currentPiecesNumber,
                 board: tmpBoard,
                 children: []  
               }
@@ -1052,13 +1052,13 @@ class GameBoard extends Component {
           }
           if(player === 'b' && this.didBlackWon()) {
             node = {
-              value: 1000,
+              value: value + 1000,
               board: tmpBoard,
               children: []  
             }
            } else if(player === 'r' && this.didRedWon()) {
             node = {
-              value: 1000,
+              value: value - 1000,
               board: tmpBoard,
               children: []  
             }
@@ -1076,13 +1076,13 @@ class GameBoard extends Component {
             tmpBoard = this.performMove(tmpBoard,kingMoves[i],kingMoves[j],false,[id1,id2],player);
             if(player === 'b' && this.didBlackWon()) {
               node = {
-                value: 1000,
+                value: value + 1000,
                 board: tmpBoard,
                 children: []  
               }
             } else if(player === 'r' && this.didRedWon()) {
               node = {
-                value: 1000,
+                value: value - 1000,
                 board: tmpBoard,
                 children: []  
               }
@@ -1090,14 +1090,14 @@ class GameBoard extends Component {
               if(player === 'b') {
                 currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
                 node = {
-                  value: 1 + currentPiecesNumber,
+                  value: value + 1 + currentPiecesNumber,
                   board: tmpBoard,
                   children: []
                 }
               } else {
                 currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
                 node = {
-                  value: 1 + currentPiecesNumber,
+                  value: value - 1 - currentPiecesNumber,
                   board: tmpBoard,
                   children: []
                 }
@@ -1123,14 +1123,14 @@ class GameBoard extends Component {
               if(player === 'b') {
                 currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
                 node = {
-                  value: 10*k + currentPiecesNumber,
+                  value: value + 10*k + currentPiecesNumber,
                   board: tmpBoard,
                   children: []  
                 } 
               } else {
                 currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
                 node = {
-                  value: 10*k + currentPiecesNumber,
+                  value: value - 10*k - currentPiecesNumber,
                   board: tmpBoard,
                   children: []  
                 }
@@ -1139,14 +1139,14 @@ class GameBoard extends Component {
               if(player === 'b') {
                 currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
                 node = {
-                  value: 10 + currentPiecesNumber,
+                  value: value + 10 + currentPiecesNumber,
                   board: tmpBoard,
                   children: []  
                 }
               } else {
                 currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
                 node = {
-                  value: 10 + currentPiecesNumber,
+                  value: value - 10 - currentPiecesNumber,
                   board: tmpBoard,
                   children: []  
                 }
@@ -1154,13 +1154,13 @@ class GameBoard extends Component {
             }
             if(player === 'b' && this.didBlackWon()) {
               node = {
-                value: 1000,
+                value: value + 1000,
                 board: tmpBoard,
                 children: []  
               }
             } else if(player === 'r' && this.didRedWon()) {
               node = {
-                value: 1000,
+                value: value - 1000,
                 board: tmpBoard,
                 children: []  
               }
@@ -1178,7 +1178,7 @@ class GameBoard extends Component {
 
   createNextTreeLevel = (node,player) => {
     node.children.forEach( child => {
-      child.children = this.getAllMoves(player,child.board);
+      child.children = this.getAllMoves(player,child.board, child.value);
     });
   }
 
@@ -1247,7 +1247,7 @@ class GameBoard extends Component {
       children: []
     }
     // first level
-    Node.children = this.getAllMoves(maxPlayer,tmpBoard);
+    Node.children = this.getAllMoves(maxPlayer,tmpBoard, Node.value);
     this.createNextTreeLevel(Node,minPlayer);
     Node.children.forEach(child => {
       this.createNextTreeLevel(child,maxPlayer);
