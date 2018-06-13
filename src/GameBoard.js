@@ -51,6 +51,7 @@ class GameBoard extends Component {
   renderCells = (board) => {
     return (
       <div className="GameBoard">
+        <button className='AITurn' onClick={this.makeAIMove}>Tap to end your turn !</button>
         {board.map(row => row.map(this.whichCell))}
       </div>
     );
@@ -689,13 +690,14 @@ class GameBoard extends Component {
     if(this.state.activePlayer === 'r'){
       var id1 = Math.floor(value/10) - 1;
       var id2 = value % 10 - 1;
+      var i, j = 1, isCorrectCell = false;
+      var nextTurn;
       this.shouldGameEnd();
       if(this.state.isActivePieceKing) {
         this.setPossibleKingMoves(this.state.board,id1, id2, this.state.activePlayer);
         this.checkIfKingsBeatingAvailable(this.state.board,id1, id2, this.state.activePlayer);
         if( this.state.board[id1][id2].player === 'none' && 
             this.state.possibleMovesIds.length !== 0 && this.state.board[id1][id2].color === 'black'){
-          var i, j = 1, isCorrectCell = false;
           for(i = 0; i < this.state.possibleMovesIds.length; i++) {
             if(id1 === this.state.possibleMovesIds[i] && id2 === this.state.possibleMovesIds[j]) {
               isCorrectCell = true;
@@ -732,7 +734,7 @@ class GameBoard extends Component {
             j = j+2;
           }
           if(isCorrectCell) {
-            var nextTurn = true;
+            nextTurn = true;
             this.state.board[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
             this.state.board[id1][id2].type = 'king';
             this.setState({isActivePieceKing: false});
@@ -752,7 +754,8 @@ class GameBoard extends Component {
         this.checkIfBeatingDownAvailable(this.state.board,id1, id2, this.state.activePlayer);
         if( this.state.board[id1][id2].player === 'none' && 
             this.state.possibleMovesIds.length !== 0 && this.state.board[id1][id2].color === 'black'){
-          var i, j = 1, isCorrectCell = false;
+          j = 1;
+          isCorrectCell = false;
           for(i = 0; i < this.state.possibleMovesIds.length; i++) {
             if(id1 === this.state.possibleMovesIds[i] && id2 === this.state.possibleMovesIds[j]) {
               isCorrectCell = true;
@@ -762,7 +765,7 @@ class GameBoard extends Component {
           }
           if(isCorrectCell) {
             this.performMove(this.state.board,id1, id2,true,[],this.state.activePlayer);
-            if(id1 === 7 && this.state.activePlayer === 'b' || id1 === 0 && this.state.activePlayer === 'r') {
+            if((id1 === 7 && this.state.activePlayer === 'b') || (id1 === 0 && this.state.activePlayer === 'r')) {
               this.state.board[id1][id2].type = 'king';
             }
             this.renderCells(this.state.board);
@@ -789,12 +792,12 @@ class GameBoard extends Component {
             j = j+2;
           }
           if(isCorrectCell) {
-            var nextTurn = true;
+            nextTurn = true;
             this.performBeating(this.state.board,id1, id2,true,[],'pon',this.state.activePlayer); 
             this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
             if(nextTurn) {
               this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'})
-              if(id1 === 7 && this.state.activePlayer === 'b' || id1 === 0 && this.state.activePlayer === 'r') {
+              if((id1 === 7 && this.state.activePlayer === 'b') || (id1 === 0 && this.state.activePlayer === 'r')) {
                 this.state.board[id1][id2].type = 'king';
               }
               this.renderCells(this.state.board);
@@ -805,9 +808,7 @@ class GameBoard extends Component {
         this.setPossibleKingMoves(this.state.board,id1, id2, this.state.activePlayer);
         this.checkIfKingsBeatingAvailable(this.state.board,id1, id2, this.state.activePlayer);
       }
-    } else {
-      this.makeAIMove('b');
-    }
+    } 
   }
 
   // componentDidUpdate = () => {
@@ -819,7 +820,6 @@ class GameBoard extends Component {
   performBeating = (board,id1, id2,isReal,prevPosition, type,player) => {
     var prevPos = [id1, id2];
     var tmpBoard = [...board];
-    var type;
     tmpBoard[id1][id2].player = player;
     if(isReal){
       tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].player = 'none';
@@ -943,6 +943,7 @@ class GameBoard extends Component {
     var kingBeatings = [];
     var nodeArray = [];
     var currentPiecesNumber;
+    var k,l;
     board.map(row => row.map(cell => {if(player === cell.player) {
       var id1 = Math.floor(cell.id/10) - 1;
       var id2 = cell.id % 10 - 1;
@@ -1012,8 +1013,8 @@ class GameBoard extends Component {
           multiBeatings = this.checkIfBeatingUpAvailable(tmpBoard,beatings[i],beatings[j],player);
           multiBeatings = multiBeatings.concat(this.checkIfBeatingDownAvailable(tmpBoard,beatings[i],beatings[j],player));
           if(multiBeatings.length !== 0) {
-            var l = 1;
-            for(var k=0;k<multiBeatings.length;k++) {
+            l = 1;
+            for(k=0;k<multiBeatings.length;k++) {
               tmpBoard = this.performBeating(tmpBoard,multiBeatings[k],multiBeatings[l],false,[beatings[i],beatings[j]],'pon',player);
               k++;
               l = l+2;
@@ -1114,8 +1115,8 @@ class GameBoard extends Component {
             multiBeatings = this.checkIfKingsBeatingAvailable(tmpBoard,kingBeatings.beatings[i],kingBeatings.beatings[j],player);
             this.setState({idsToBeat: multiBeatings.deletions});
             if(multiBeatings.length !== 0) {
-              var l = 1;
-              for(var k=0;k<multiBeatings.length;k++) {
+              l = 1;
+              for(k=0;k<multiBeatings.length;k++) {
                 tmpBoard = this.performBeating(tmpBoard,multiBeatings.beatings[k],multiBeatings.beatings[l],false,[kingBeatings.beatings[i],kingBeatings.beatings[j]],'king',player);
                 k++;
                 l = l+2;
@@ -1183,17 +1184,20 @@ class GameBoard extends Component {
   }
 
   minimax = (depth, nodeIndex, isMaximizingPlayer, node, alpha, beta) => {
+    var best = {};
+    var i;
+    var val = {};
     if(depth === 5) {
       return node;
     }
     if(isMaximizingPlayer) {
-      var best = { 
+      best = { 
         value: -10000,
         board: JSON.parse(JSON.stringify(node.board))
       };
       if(node.children.length !== 0) {
-        for(var i = 0; i < node.children.length-1; i++) {
-          var val = this.minimax( depth+1, i, false, node.children[i], alpha, beta);
+        for(i = 0; i < node.children.length-1; i++) {
+          val = this.minimax( depth+1, i, false, node.children[i], alpha, beta);
           if(best.value < val.value) {
             best.value = val.value;
             best.board = JSON.parse(JSON.stringify(node.children[i].board))
@@ -1211,13 +1215,13 @@ class GameBoard extends Component {
       }
       return best;
     } else {
-      var best = { 
+      best = { 
         value: 10000,
         board: JSON.parse(JSON.stringify(node.board))
       };
       if(node.children.length !== 0) {
-        for(var i = 0; i < node.children.length-1; i++) { 
-          var val = this.minimax( depth+1, i, true, node.children[i], alpha, beta);
+        for(i = 0; i < node.children.length-1; i++) { 
+          val = this.minimax( depth+1, i, true, node.children[i], alpha, beta);
           if(best.value > val.value) {
             best.value = val.value;
             best.board = JSON.parse(JSON.stringify(node.children[i].board))
@@ -1237,32 +1241,37 @@ class GameBoard extends Component {
     }
   }
  
-  makeAIMove = (player) => {
-    var maxPlayer = player;
-    var minPlayer = player === 'r' ? 'b' : 'r';
+  makeAIMove = () => {
+    var maxPlayer = 'b';
+    var minPlayer = maxPlayer === 'r' ? 'b' : 'r';
     var tmpBoard = JSON.parse(JSON.stringify(this.state.board));
     var Node = {
       value: 0,
       board: tmpBoard,
       children: []
     }
-    // first level
-    Node.children = this.getAllMoves(maxPlayer,tmpBoard, Node.value);
-    this.createNextTreeLevel(Node,minPlayer);
-    Node.children.forEach(child => {
-      this.createNextTreeLevel(child,maxPlayer);
-      child.children.forEach( child => {
-        this.createNextTreeLevel(child, minPlayer);
+    if(this.state.activePlayer !== maxPlayer) {
+      alert("You did not finish your turn yet cheater !");
+      return;
+    } else {
+      // first level
+      Node.children = this.getAllMoves(maxPlayer,tmpBoard, Node.value);
+      this.createNextTreeLevel(Node,minPlayer);
+      Node.children.forEach(child => {
+        this.createNextTreeLevel(child,maxPlayer);
         child.children.forEach( child => {
-          this.createNextTreeLevel(child, maxPlayer);
+          this.createNextTreeLevel(child, minPlayer);
+          child.children.forEach( child => {
+            this.createNextTreeLevel(child, maxPlayer);
+          })
         })
-      })
-    });
-    var newMove = this.minimax(0, 0, true, Node, -10000, 10000);
-    console.log(newMove);
-    console.log(Node); 
-    this.setState({board: newMove.board});
-    this.setState({activePlayer: minPlayer});
+      });
+      var newMove = this.minimax(0, 0, true, Node, -10000, 10000);
+      console.log(newMove);
+      console.log(Node); 
+      this.setState({board: newMove.board});
+      this.setState({activePlayer: minPlayer});
+    }
   } 
 
   render() {

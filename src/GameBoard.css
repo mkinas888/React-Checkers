@@ -3,12 +3,25 @@
   height: 100%;
   background-color: transparent; }
 
+.AITurn {
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-end;
+  border: none;
+  color: lightgray;
+  background-color: #1d5ac4;
+  order: 2;
+  margin-top: 2%;
+  padding: 10px; }
+
 .GameBoard {
   width: 45%;
   height: 100%;
   margin: 2% 25%;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-content: space-around;
   background-color: transparent;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  flex-direction: row;
+  order: 1; }
