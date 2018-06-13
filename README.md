@@ -19,4 +19,4 @@ how many pieces are left and what type they are.
 
  Alpha beta prunings are implemented so as to reduce computional complexity. 
 
-Button on the bottom trigers AI move 
+Button on the bottom triggers AI move 

@@ -7,6 +7,7 @@ class GameBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      initBoard:  JSON.parse(JSON.stringify(data)),
       board: data,
       activePlayer: 'r',
       isActivePieceKing: false,
@@ -52,10 +53,25 @@ class GameBoard extends Component {
     return (
       <div className="GameBoard">
         <button className='AITurn' onClick={this.makeAIMove}>Tap to end your turn !</button>
+        <button className='Reset' onClick={this.resetGame}>New game</button>
         {board.map(row => row.map(this.whichCell))}
       </div>
     );
-  } 
+  }
+  
+  resetGame = () => {
+    this.setState({
+      board: this.state.initBoard,
+      activePlayer: 'r',
+      isActivePieceKing: false,
+      idsToBeat: [],
+      previousPiecePosition: [],
+      possibleMovesIds: [],
+      availableBeatingsUp: [],
+      availableBeatingsDown: []
+    });
+    this.renderCells(this.state.initBoard);
+  }
 
   setPossibleMoves = (board,id1, id2, player) => {
     var empty = [];

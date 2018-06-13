@@ -3,7 +3,7 @@
   height: 100%;
   background-color: transparent; }
 
-.AITurn {
+.AITurn, .Reset {
   display: flex;
   justify-content: flex-end;
   align-self: flex-end;
@@ -13,6 +13,12 @@
   order: 2;
   margin-top: 2%;
   padding: 10px; }
+
+.AITurn {
+  margin-right: 2%; }
+
+.Reset {
+  margin-left: 2%; }
 
 .GameBoard {
   width: 45%;
