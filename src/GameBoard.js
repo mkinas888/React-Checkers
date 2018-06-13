@@ -63,8 +63,11 @@ class GameBoard extends Component {
     this.setState({possibleMovesIds: empty});
     this.setState({previousPiecePosition: empty});
     this.setState({isActivePieceKing: false});
+
     // remove active state from previously activated 
     board.map(row => row.map(cell => cell.active = false));
+
+    // other player's pieces unavailable
     if(player !== board[id1][id2].player){
       return;
     }
@@ -139,12 +142,14 @@ class GameBoard extends Component {
   setPossibleKingMoves = (board, id1, id2, player) => {
     var empty = [];
     var moves = [];
+    var prevPos = [];
     var i=0,j=0,k=0;
     this.setState({possibleMovesIds: empty});
     this.setState({previousPiecePosition: empty});
     this.setState({isActivePieceKing: true});
     // remove active state from previously activated 
     board.map(row => row.map(cell => cell.active = false));
+    // other player's pieces unavailable
     if(player !== board[id1][id2].player){
       return;
     }
@@ -152,9 +157,7 @@ class GameBoard extends Component {
       if(player === 'r') {
         if(board[id1][id2].player === 'r') {
           board[id1][id2].active = true;
-          this.setState(prevState => ({
-            previousPiecePosition: [...prevState.previousPiecePosition, id1, id2],
-          })); 
+          prevPos = [...prevPos, id1, id2]; 
         }
         j = id2 + 1;
         k = id2 - 1;
@@ -202,9 +205,7 @@ class GameBoard extends Component {
         }
       } else if (player === 'b') {
         board[id1][id2].active = true;
-        this.setState(prevState => ({
-          previousPiecePosition: [...prevState.previousPiecePosition, id1, id2],
-        }));
+        prevPos = [...prevPos, id1, id2]
         j =id2 + 1;
         k = id2 - 1;
         for(i = id1 + 1; i <=7; i++) {
@@ -251,7 +252,10 @@ class GameBoard extends Component {
         }
       }
     }
-    this.setState({possibleMovesIds: moves});
+    this.setState({
+      possibleMovesIds: moves,
+      previousPiecePosition: prevPos
+    });
     return moves;
   }
 
@@ -420,6 +424,7 @@ class GameBoard extends Component {
     var beatingsUp = [];
     var beatingsDown = [];
     var positionToDelete = [];
+    var finalState = {};
     var i=0,j=0,k=0;
     this.setState({availableBeatingsUp: empty});
     this.setState({availableBeatingsDown: empty})
@@ -651,7 +656,9 @@ class GameBoard extends Component {
     this.setState({idsToBeat: positionToDelete});
     this.setState({availableBeatingsUp: beatingsUp});
     this.setState({availableBeatingsDown: beatingsDown});
-    return (beatingsUp.concat(beatingsDown));
+    finalState.beatings = beatingsUp.concat(beatingsDown);
+    finalState.deletions = positionToDelete;
+    return finalState;
   }
 
   didRedWon = () => {
@@ -701,6 +708,7 @@ class GameBoard extends Component {
             this.state.board[id1][id2].type = 'king';
             this.setState({isActivePieceKing: false});
             this.performMove(this.state.board,id1, id2,true,[],this.state.activePlayer);
+            this.renderCells(this.state.board);
             return;
           }
         }
@@ -728,11 +736,12 @@ class GameBoard extends Component {
             this.state.board[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
             this.state.board[id1][id2].type = 'king';
             this.setState({isActivePieceKing: false});
-            this.performBeating(this.state.board,id1, id2,true,[],this.state.activePlayer); 
+            this.performBeating(this.state.board,id1, id2,true,[],'king',this.state.activePlayer); 
             this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
             if(nextTurn) {
               this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'});
-            } 
+            }
+            this.renderCells(this.state.board); 
             return;
           }
         }
@@ -756,6 +765,7 @@ class GameBoard extends Component {
             if(id1 === 7 && this.state.activePlayer === 'b' || id1 === 0 && this.state.activePlayer === 'r') {
               this.state.board[id1][id2].type = 'king';
             }
+            this.renderCells(this.state.board);
             return;
           }
         }
@@ -780,13 +790,14 @@ class GameBoard extends Component {
           }
           if(isCorrectCell) {
             var nextTurn = true;
-            this.performBeating(this.state.board,id1, id2,true,[],this.state.activePlayer); 
+            this.performBeating(this.state.board,id1, id2,true,[],'pon',this.state.activePlayer); 
             this.state.board.map(row => row.map(cell => {if(cell.active === true){nextTurn = false;}}));
             if(nextTurn) {
               this.setState({activePlayer: this.state.activePlayer === 'r' ? 'b' : 'r'})
               if(id1 === 7 && this.state.activePlayer === 'b' || id1 === 0 && this.state.activePlayer === 'r') {
                 this.state.board[id1][id2].type = 'king';
               }
+              this.renderCells(this.state.board);
             } 
           }
         }
@@ -799,14 +810,21 @@ class GameBoard extends Component {
     }
   }
 
-  performBeating = (board,id1, id2,isReal,prevPosition,player) => {
+  // componentDidUpdate = () => {
+  //   if(this.state.activePlayer === 'b' ) {
+  //     this.makeAIMove('b');
+  //   }
+  // }
+
+  performBeating = (board,id1, id2,isReal,prevPosition, type,player) => {
     var prevPos = [id1, id2];
     var tmpBoard = [...board];
+    var type;
     tmpBoard[id1][id2].player = player;
     if(isReal){
       tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].player = 'none';
       tmpBoard[this.state.previousPiecePosition[0]][this.state.previousPiecePosition[1]].type = 'pon';
-      if(this.state.isActivePieceKing) {
+      if(type === 'king') {
         tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].player = 'none';
         tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].type = 'pon';
       } else {
@@ -832,7 +850,7 @@ class GameBoard extends Component {
     } else {
       tmpBoard[prevPosition[0]][prevPosition[1]].player = 'none';
       tmpBoard[prevPosition[0]][prevPosition[1]].type = 'pon';
-      if(this.state.isActivePieceKing) {
+      if(type === 'king') {
         tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].player = 'none';
         tmpBoard[this.state.idsToBeat[0]][this.state.idsToBeat[1]].type = 'pon';
       } else {
@@ -856,7 +874,7 @@ class GameBoard extends Component {
         }
       }
     }
-    if(this.state.isActivePieceKing) {
+    if(type === 'king') {
       this.checkIfKingsBeatingAvailable(this.state.board,id1,id2, this.state.activePlayer);
     } else {
       this.checkIfBeatingUpAvailable(this.state.board,id1, id2, this.state.activePlayer);
@@ -890,6 +908,32 @@ class GameBoard extends Component {
     return tmpBoard
   }
 
+  
+  
+  getRedPiecesNumber = (board) => {
+    var redPiecesNumber = 0;
+    board.map(row => row.map(cell => {if(cell.player === 'r'){
+      if(cell.type === 'pon') {
+        redPiecesNumber += 3;
+      } else {
+        redPiecesNumber += 5;
+      }
+    }}));
+    return redPiecesNumber;
+  }
+
+  getBlackPiecesNumber = (board) => {
+    var blackPiecesNumber = 0;
+    board.map(row => row.map(cell => {if(cell.player === 'b'){
+      if(cell.type === 'pon') {
+        blackPiecesNumber += 3;
+      } else {
+        blackPiecesNumber += 5;
+      }
+    }}));
+    return blackPiecesNumber;
+  }
+
   getAllMoves = (player,board) => {
     var tmpBoard = JSON.parse(JSON.stringify(board));
     var moves = [];
@@ -898,6 +942,7 @@ class GameBoard extends Component {
     var multiBeatings = [];
     var kingBeatings = [];
     var nodeArray = [];
+    var currentPiecesNumber;
     board.map(row => row.map(cell => {if(player === cell.player) {
       var id1 = Math.floor(cell.id/10) - 1;
       var id2 = cell.id % 10 - 1;
@@ -910,31 +955,49 @@ class GameBoard extends Component {
         for(i=0;i<moves.length;i++) {
           tmpBoard = this.performMove(tmpBoard,moves[i],moves[j],false,[id1,id2],player);
           if(player === 'b') {
-            if(moves[i] === 7) {
+            if(this.didBlackWon()) {
               node = {
-                value:  25,
+                value:  1000,
                 board: tmpBoard,
                 children: []
               }
             } else {
-              node = {
-                value:  1,
-                board: tmpBoard,
-                children: []
+              currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
+              if(moves[i] === 7) {
+                node = {
+                  value:  25 + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []
+                }
+              } else {
+                node = {
+                  value:  1 + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []
+                } 
               }
             }
           } else {
-            if(moves[i] === 0) {
+            if(this.didRedWon()) {
               node = {
-                value:  25,
+                value:  1000,
                 board: tmpBoard,
                 children: []
               }
             } else {
-              node = {
-                value:  1,
-                board: tmpBoard,
-                children: []
+              currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
+              if(moves[i] === 0) {
+                node = {
+                  value:  25 + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []
+                }
+              } else {
+                node = {
+                  value:  1 + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []
+                }
               }
             }
           }
@@ -945,24 +1008,57 @@ class GameBoard extends Component {
         }
         j = 1;
         for(i=0;i<beatings.length;i++) {
-          tmpBoard = this.performBeating(tmpBoard,beatings[i],beatings[j],false,[id1,id2],player);
+          tmpBoard = this.performBeating(tmpBoard,beatings[i],beatings[j],false,[id1,id2],'pon',player);
           multiBeatings = this.checkIfBeatingUpAvailable(tmpBoard,beatings[i],beatings[j],player);
           multiBeatings = multiBeatings.concat(this.checkIfBeatingDownAvailable(tmpBoard,beatings[i],beatings[j],player));
           if(multiBeatings.length !== 0) {
             var l = 1;
             for(var k=0;k<multiBeatings.length;k++) {
-              tmpBoard = this.performBeating(tmpBoard,multiBeatings[k],multiBeatings[l],false,[beatings[i],beatings[j]],player);
+              tmpBoard = this.performBeating(tmpBoard,multiBeatings[k],multiBeatings[l],false,[beatings[i],beatings[j]],'pon',player);
               k++;
               l = l+2;
             }
+            if(player === 'b') {
+              currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
+              node = {
+                value: 10*k + currentPiecesNumber,
+                board: tmpBoard,
+                children: []  
+              }
+            } else {
+              currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
+              node = {
+                value: 10*k + currentPiecesNumber,
+                board: tmpBoard,
+                children: []  
+              }
+            }
+          } else {
+            if(player === 'b') {
+              currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
+              node = {
+                value: 10 + currentPiecesNumber,
+                board: tmpBoard,
+                children: []  
+              }
+            } else {
+              currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
+              node = {
+                value: 10 + currentPiecesNumber,
+                board: tmpBoard,
+                children: []  
+              }
+            }
+          }
+          if(player === 'b' && this.didBlackWon()) {
             node = {
-              value: 10*k,
+              value: 1000,
               board: tmpBoard,
               children: []  
             }
-          } else {
+           } else if(player === 'r' && this.didRedWon()) {
             node = {
-              value: 10,
+              value: 1000,
               board: tmpBoard,
               children: []  
             }
@@ -972,49 +1068,108 @@ class GameBoard extends Component {
           tmpBoard = JSON.parse(JSON.stringify(board))
           nodeArray = [...nodeArray,node];
         }
-      } else {
-        kingMoves = this.setPossibleKingMoves(tmpBoard,id1,id2,player);
-        kingBeatings = this.checkIfKingsBeatingAvailable(tmpBoard,id1,id2,player);
-        for(i=0;i<moves.length;i++) {
-          tmpBoard = this.performMove(tmpBoard,kingMoves[i],kingMoves[j],false,[id1,id2],player);
-          node = {
-            value: 1,
-            board: tmpBoard,
-            children: []
+      } else if (cell.type === 'king') {
+          kingMoves = this.setPossibleKingMoves(tmpBoard,id1,id2,player);
+          kingBeatings = this.checkIfKingsBeatingAvailable(tmpBoard,id1,id2,player);
+          this.setState({idsToBeat: kingBeatings.deletions});
+          for(i=0;i<kingMoves.length;i++) {
+            tmpBoard = this.performMove(tmpBoard,kingMoves[i],kingMoves[j],false,[id1,id2],player);
+            if(player === 'b' && this.didBlackWon()) {
+              node = {
+                value: 1000,
+                board: tmpBoard,
+                children: []  
+              }
+            } else if(player === 'r' && this.didRedWon()) {
+              node = {
+                value: 1000,
+                board: tmpBoard,
+                children: []  
+              }
+            }else {
+              if(player === 'b') {
+                currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
+                node = {
+                  value: 1 + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []
+                }
+              } else {
+                currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
+                node = {
+                  value: 1 + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []
+                }
+              }
+            }
+            i++;
+            j = j+2;
+            tmpBoard = JSON.parse(JSON.stringify(tmpBoard))
+            nodeArray = [...nodeArray,node];
           }
-          i++;
-          j = j+2;
-          tmpBoard = JSON.parse(JSON.stringify(tmpBoard))
-          nodeArray = [...nodeArray,node];
-        }
-        j = 1;
-        for(i=0;i<kingBeatings.length;i++) {
-          tmpBoard = this.performBeating(tmpBoard,kingBeatings[i],kingBeatings[j],false,[id1,id2],player);
-          multiBeatings = this.checkIfKingsBeatingAvailable(tmpBoard,kingBeatings[i],kingBeatings[j],player);
-          if(multiBeatings.length !== 0) {
-            var l = 1;
-            for(var k=0;k<multiBeatings.length;k++) {
-              tmpBoard = this.performBeating(tmpBoard,multiBeatings[k],multiBeatings[l],false,[kingBeatings[i],kingBeatings[j]],player);
-              k++;
-              l = l+2;
+          j = 1;
+          for(i=0;i<kingBeatings.length;i++) {
+            tmpBoard = this.performBeating(tmpBoard,kingBeatings.beatings[i],kingBeatings.beatings[j],false,[id1,id2],'king',player);
+            multiBeatings = this.checkIfKingsBeatingAvailable(tmpBoard,kingBeatings.beatings[i],kingBeatings.beatings[j],player);
+            this.setState({idsToBeat: multiBeatings.deletions});
+            if(multiBeatings.length !== 0) {
+              var l = 1;
+              for(var k=0;k<multiBeatings.length;k++) {
+                tmpBoard = this.performBeating(tmpBoard,multiBeatings.beatings[k],multiBeatings.beatings[l],false,[kingBeatings.beatings[i],kingBeatings.beatings[j]],'king',player);
+                k++;
+                l = l+2;
+              }
+              if(player === 'b') {
+                currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
+                node = {
+                  value: 10*k + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []  
+                } 
+              } else {
+                currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
+                node = {
+                  value: 10*k + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []  
+                }
+              }
+            } else {
+              if(player === 'b') {
+                currentPiecesNumber = this.getBlackPiecesNumber(tmpBoard);
+                node = {
+                  value: 10 + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []  
+                }
+              } else {
+                currentPiecesNumber = this.getRedPiecesNumber(tmpBoard);
+                node = {
+                  value: 10 + currentPiecesNumber,
+                  board: tmpBoard,
+                  children: []  
+                }
+              }
             }
-            node = {
-              value: 10*k,
-              board: tmpBoard,
-              children: []  
+            if(player === 'b' && this.didBlackWon()) {
+              node = {
+                value: 1000,
+                board: tmpBoard,
+                children: []  
+              }
+            } else if(player === 'r' && this.didRedWon()) {
+              node = {
+                value: 1000,
+                board: tmpBoard,
+                children: []  
+              }
             }
-          } else {
-            node = {
-              value: 10,
-              board: tmpBoard,
-              children: []  
-            }
+            i++;
+            j = j+2;
+            tmpBoard = JSON.parse(JSON.stringify(tmpBoard))
+            nodeArray = [...nodeArray,node];
           }
-          i++;
-          j = j+2;
-          tmpBoard = JSON.parse(JSON.stringify(tmpBoard))
-          nodeArray = [...nodeArray,node];
-        }
       }
     }}));
     board.map(row => row.map(cell => {cell.active = false}));
@@ -1028,30 +1183,55 @@ class GameBoard extends Component {
   }
 
   minimax = (depth, nodeIndex, isMaximizingPlayer, node, alpha, beta) => {
-    
     if(depth === 5) {
-      return node.value;
+      return node;
     }
     if(isMaximizingPlayer) {
-      var best = -10000;
-      for(var i = 0; i < node.children.length-1; i++) {
-        var val = this.minimax( depth+1, i, false, node.children[i], alpha, beta);
-        best = Math.max(best, val);
-        alpha = Math.max(alpha, best);
-        if(beta <= alpha) {
-          break;
-        }
+      var best = { 
+        value: -10000,
+        board: JSON.parse(JSON.stringify(node.board))
       };
+      if(node.children.length !== 0) {
+        for(var i = 0; i < node.children.length-1; i++) {
+          var val = this.minimax( depth+1, i, false, node.children[i], alpha, beta);
+          if(best.value < val.value) {
+            best.value = val.value;
+            best.board = JSON.parse(JSON.stringify(node.children[i].board))
+          }
+          if(best.value > alpha) {
+            alpha = best.value;
+          }
+          if(beta <= alpha) {
+            break;
+          }
+        };
+      } else {
+        best.value = node.value;
+        best.board = JSON.parse(JSON.stringify(node.board));
+      }
       return best;
     } else {
-      var best = 10000;
-      for(var i = 0; i < node.children.length-1; i++) { 
-        var val = this.minimax( depth+1, i, true, node.children[i], alpha, beta);
-        best = Math.min(best, val);
-        alpha = Math.min(alpha, best);
-        if(beta <= alpha) {
-          break;
-        }
+      var best = { 
+        value: 10000,
+        board: JSON.parse(JSON.stringify(node.board))
+      };
+      if(node.children.length !== 0) {
+        for(var i = 0; i < node.children.length-1; i++) { 
+          var val = this.minimax( depth+1, i, true, node.children[i], alpha, beta);
+          if(best.value > val.value) {
+            best.value = val.value;
+            best.board = JSON.parse(JSON.stringify(node.children[i].board))
+          }
+          if(best.value < alpha) {
+            alpha = best.value;
+          }
+          if(beta <= alpha) {
+            break;
+          }
+        };
+      } else {
+        best.value = node.value;
+        best.board = JSON.parse(JSON.stringify(node.board));
       }
       return best;
     }
@@ -1075,19 +1255,14 @@ class GameBoard extends Component {
         this.createNextTreeLevel(child, minPlayer);
         child.children.forEach( child => {
           this.createNextTreeLevel(child, maxPlayer);
-          // child.children.forEach( child => {
-          //   this.createNextTreeLevel(child, minPlayer);
-            // child.children.forEach( child => {
-            //   this.createNextTreeLevel(child, maxPlayer);
-            // })
-          // })
         })
       })
     });
-    var lol = this.minimax(0, 0, true, Node, -10000, 10000);
-    console.log(Node);
-    console.log(lol);
-    this.setState({board: Node.children[6].board});
+    var newMove = this.minimax(0, 0, true, Node, -10000, 10000);
+    console.log(newMove);
+    console.log(Node); 
+    this.setState({board: newMove.board});
+    this.setState({activePlayer: minPlayer});
   } 
 
   render() {
