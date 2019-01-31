@@ -52,9 +52,11 @@ class GameBoard extends Component {
   renderCells = (board) => {
     return (
       <div className="GameBoard">
-        <button className='AITurn' onClick={this.makeAIMove}>Tap to end your turn !</button>
-        <button className='Reset' onClick={this.resetGame}>New game</button>
         {board.map(row => row.map(this.whichCell))}
+        <div class="action-buttons">
+          <button className='AITurn' onClick={this.makeAIMove}>Tap to end your turn !</button>
+          <button className='Reset' onClick={this.resetGame}>New game</button>
+        </div>
       </div>
     );
   }

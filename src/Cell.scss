@@ -1,9 +1,9 @@
+
 .cell-black-false, .cell-black-true, .cell-white-false, .cell-white-true {
-    height: 4em;
-    width: 4em;
+    height: 5vw;
+    width: 5vw;
     margin: 2px;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
@@ -18,17 +18,10 @@
     background-color: #fcfdff;
 }
 
-.cell-black-true {
+.cell-black-true, .cell-white-true {
     border: 1px solid #1d5ac4;
     background-color: #1d5ac4;
 }
-
-.cell-white-true {
-    border: 1px solid #1d5ac4;
-    background-color: #1d5ac4;
-}
-
-
 
 button {
     text-decoration: none;
@@ -78,3 +71,33 @@ button {
     -webkit-box-shadow: none; 
     -moz-box-shadow: none;
 }
+
+@media screen and (max-width: 960px) {
+    .cell-black-false, .cell-black-true, .cell-white-false, .cell-white-true {
+        height: 4.7vw;
+        width: 4.7vw;
+        margin: 1px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .cell-black-false, .cell-black-true, .cell-white-false, .cell-white-true {
+        height: 4.4vw;
+        width: 4.4vw;
+        margin: 1px;
+    }
+    .gamePiece-black-pon, .gamePiece-red-pon, .gamePiece-none, .gamePiece-black-king, 
+    .gamePiece-red-king, .gamePiece-none-pon {
+        height: 70%;
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .cell-black-false, .cell-black-true, .cell-white-false, .cell-white-true {
+        height: 4.1vw;
+        width: 4.1vw;
+        margin: 1px;
+    }
+}
+
